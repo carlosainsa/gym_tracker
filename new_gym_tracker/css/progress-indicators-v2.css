@@ -1,0 +1,120 @@
+/* Estilos para los indicadores de progreso (versión 2) */
+
+/* Estilos para los inputs con indicadores de color */
+input.bg-green-50 {
+    background-color: rgba(240, 253, 244, 0.8) !important;
+    border-color: #86efac !important;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+input.bg-yellow-50 {
+    background-color: rgba(254, 252, 232, 0.8) !important;
+    border-color: #fde047 !important;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+input.bg-red-50 {
+    background-color: rgba(254, 242, 242, 0.8) !important;
+    border-color: #fca5a5 !important;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Estilos para las filas con indicadores de color */
+.grid.grid-cols-5.gap-2.items-center.bg-green-50 {
+    background-color: rgba(240, 253, 244, 0.3) !important;
+    transition: background-color 0.3s;
+}
+
+.grid.grid-cols-5.gap-2.items-center.bg-yellow-50 {
+    background-color: rgba(254, 252, 232, 0.3) !important;
+    transition: background-color 0.3s;
+}
+
+.grid.grid-cols-5.gap-2.items-center.bg-red-50 {
+    background-color: rgba(254, 242, 242, 0.3) !important;
+    transition: background-color 0.3s;
+}
+
+/* Estilos para las tarjetas de ejercicios con indicadores de color */
+.bg-white.rounded-xl.shadow-card.p-5.mb-5.border-green-200 {
+    border-width: 2px !important;
+    border-color: #86efac !important;
+    transition: border-color 0.3s;
+}
+
+.bg-white.rounded-xl.shadow-card.p-5.mb-5.border-yellow-200 {
+    border-width: 2px !important;
+    border-color: #fde047 !important;
+    transition: border-color 0.3s;
+}
+
+.bg-white.rounded-xl.shadow-card.p-5.mb-5.border-red-200 {
+    border-width: 2px !important;
+    border-color: #fca5a5 !important;
+    transition: border-color 0.3s;
+}
+
+/* Estilos para el indicador del día */
+#day-indicator {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: background-color 0.3s;
+}
+
+/* Tooltips para los elementos con title */
+[title] {
+    position: relative;
+    cursor: help;
+}
+
+/* Animación sutil para los cambios de color */
+@keyframes pulse-green {
+    0% {
+        box-shadow: 0 0 0 0 rgba(134, 239, 172, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(134, 239, 172, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(134, 239, 172, 0);
+    }
+}
+
+@keyframes pulse-yellow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(253, 224, 71, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(253, 224, 71, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(253, 224, 71, 0);
+    }
+}
+
+@keyframes pulse-red {
+    0% {
+        box-shadow: 0 0 0 0 rgba(252, 165, 165, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(252, 165, 165, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(252, 165, 165, 0);
+    }
+}
+
+.bg-white.rounded-xl.shadow-card.p-5.mb-5.border-green-200 {
+    animation: pulse-green 2s infinite;
+}
+
+.bg-white.rounded-xl.shadow-card.p-5.mb-5.border-yellow-200 {
+    animation: pulse-yellow 2s infinite;
+}
+
+.bg-white.rounded-xl.shadow-card.p-5.mb-5.border-red-200 {
+    animation: pulse-red 2s infinite;
+}

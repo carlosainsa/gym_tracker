@@ -1,0 +1,269 @@
+{
+  "exercises": [
+    {
+      "id": "prensa-piernas",
+      "name": "Prensa de piernas",
+      "muscleGroups": ["Cuádriceps", "Glúteos", "Isquiotibiales"],
+      "description": "Siéntate en la máquina con la espalda apoyada en el respaldo. Coloca los pies en la plataforma a la anchura de los hombros. Empuja la plataforma extendiendo las piernas y luego regresa controladamente a la posición inicial.",
+      "category": "Piernas",
+      "equipment": "Máquina",
+      "difficulty": "Principiante",
+      "image": "prensa-piernas.jpg"
+    },
+    {
+      "id": "sentadilla-goblet",
+      "name": "Sentadilla Goblet con mancuerna",
+      "muscleGroups": ["Cuádriceps", "Glúteos", "Core"],
+      "description": "Sujeta una mancuerna verticalmente contra el pecho, con los codos hacia abajo. Separa los pies a la anchura de los hombros, baja las caderas como si te sentaras en una silla, manteniendo la espalda recta. Regresa a la posición inicial.",
+      "category": "Piernas",
+      "equipment": "Mancuerna",
+      "difficulty": "Principiante",
+      "image": "sentadilla-goblet.jpg"
+    },
+    {
+      "id": "extension-piernas",
+      "name": "Extensión de piernas",
+      "muscleGroups": ["Cuádriceps"],
+      "description": "Siéntate en la máquina con la espalda apoyada en el respaldo. Coloca los tobillos detrás del rodillo acolchado. Extiende las piernas hasta que estén completamente rectas y luego baja controladamente.",
+      "category": "Piernas",
+      "equipment": "Máquina",
+      "difficulty": "Principiante",
+      "image": "extension-piernas.jpg"
+    },
+    {
+      "id": "curl-femoral",
+      "name": "Curl femoral tumbado",
+      "muscleGroups": ["Isquiotibiales", "Glúteos"],
+      "description": "Túmbate boca abajo en la máquina con los tobillos debajo del rodillo acolchado. Flexiona las rodillas para llevar los talones hacia los glúteos y luego baja controladamente.",
+      "category": "Piernas",
+      "equipment": "Máquina",
+      "difficulty": "Principiante",
+      "image": "curl-femoral.jpg"
+    },
+    {
+      "id": "abduccion-cadera",
+      "name": "Abducción de cadera",
+      "muscleGroups": ["Glúteo medio", "Estabilizadores de cadera"],
+      "description": "Siéntate en la máquina con las piernas juntas y las almohadillas contra la parte exterior de los muslos. Separa las piernas hacia afuera contra la resistencia y luego regresa controladamente.",
+      "category": "Piernas",
+      "equipment": "Máquina",
+      "difficulty": "Principiante",
+      "image": "abduccion-cadera.jpg"
+    },
+    {
+      "id": "aduccion-cadera",
+      "name": "Aducción de cadera",
+      "muscleGroups": ["Aductores", "Estabilizadores de cadera"],
+      "description": "Siéntate en la máquina con las piernas separadas y las almohadillas contra la parte interior de los muslos. Junta las piernas contra la resistencia y luego regresa controladamente.",
+      "category": "Piernas",
+      "equipment": "Máquina",
+      "difficulty": "Principiante",
+      "image": "aduccion-cadera.jpg"
+    },
+    {
+      "id": "plancha-frontal",
+      "name": "Plancha frontal",
+      "muscleGroups": ["Core", "Abdominales", "Estabilizadores"],
+      "description": "Apóyate sobre los antebrazos y las puntas de los pies, manteniendo el cuerpo en línea recta desde la cabeza hasta los talones. Contrae el abdomen y mantén la posición durante el tiempo indicado.",
+      "category": "Core",
+      "equipment": "Peso corporal",
+      "difficulty": "Intermedio",
+      "image": "plancha-frontal.jpg"
+    },
+    {
+      "id": "russian-twist",
+      "name": "Russian twist con mancuerna",
+      "muscleGroups": ["Oblicuos", "Core"],
+      "description": "Siéntate en el suelo con las rodillas flexionadas y los pies elevados. Sujeta una mancuerna con ambas manos frente a ti. Gira el torso de un lado a otro, tocando la mancuerna en el suelo a cada lado.",
+      "category": "Core",
+      "equipment": "Mancuerna",
+      "difficulty": "Intermedio",
+      "image": "russian-twist.jpg"
+    },
+    {
+      "id": "press-banca",
+      "name": "Press de banca",
+      "muscleGroups": ["Pectoral", "Deltoides", "Tríceps"],
+      "description": "Acuéstate en el banco con los pies apoyados en el suelo. Agarra la barra con las manos a una distancia mayor que la anchura de los hombros. Baja la barra hasta rozar el pecho y empuja hacia arriba hasta extender los brazos.",
+      "category": "Pecho",
+      "equipment": "Barra",
+      "difficulty": "Intermedio",
+      "image": "press-banca.jpg"
+    },
+    {
+      "id": "press-hombros",
+      "name": "Press de hombros con mancuernas",
+      "muscleGroups": ["Deltoides", "Tríceps"],
+      "description": "Siéntate en un banco con respaldo vertical. Sostén una mancuerna en cada mano a la altura de los hombros, con las palmas hacia adelante. Empuja las mancuernas hacia arriba hasta extender los brazos y luego bájalas controladamente.",
+      "category": "Hombros",
+      "equipment": "Mancuernas",
+      "difficulty": "Intermedio",
+      "image": "press-hombros.jpg"
+    },
+    {
+      "id": "aperturas-mancuernas",
+      "name": "Aperturas con mancuernas",
+      "muscleGroups": ["Pectoral", "Deltoides anterior"],
+      "description": "Acuéstate en un banco plano con una mancuerna en cada mano. Extiende los brazos sobre el pecho con las palmas enfrentadas. Baja los brazos hacia los lados en un movimiento de arco hasta sentir un estiramiento en el pecho, luego vuelve a la posición inicial.",
+      "category": "Pecho",
+      "equipment": "Mancuernas",
+      "difficulty": "Intermedio",
+      "image": "aperturas-mancuernas.jpg"
+    },
+    {
+      "id": "elevaciones-laterales",
+      "name": "Elevaciones laterales",
+      "muscleGroups": ["Deltoides lateral"],
+      "description": "De pie con una mancuerna en cada mano a los lados del cuerpo. Mantén los codos ligeramente flexionados y eleva los brazos hacia los lados hasta que estén paralelos al suelo. Baja controladamente a la posición inicial.",
+      "category": "Hombros",
+      "equipment": "Mancuernas",
+      "difficulty": "Principiante",
+      "image": "elevaciones-laterales.jpg"
+    },
+    {
+      "id": "extension-triceps",
+      "name": "Extensión de tríceps polea",
+      "muscleGroups": ["Tríceps"],
+      "description": "De pie frente a la polea alta, agarra la cuerda o barra con las manos. Mantén los codos pegados al cuerpo y extiende los antebrazos hacia abajo hasta que los brazos estén completamente extendidos. Regresa lentamente a la posición inicial.",
+      "category": "Brazos",
+      "equipment": "Polea",
+      "difficulty": "Principiante",
+      "image": "extension-triceps.jpg"
+    },
+    {
+      "id": "fondos-banco",
+      "name": "Fondos en banco",
+      "muscleGroups": ["Tríceps", "Pectoral inferior"],
+      "description": "Siéntate en el borde de un banco con las manos apoyadas a los lados. Desliza el cuerpo hacia adelante hasta que las piernas estén extendidas y el peso recaiga sobre las manos. Flexiona los codos para bajar el cuerpo y luego extiéndelos para volver a subir.",
+      "category": "Brazos",
+      "equipment": "Banco",
+      "difficulty": "Principiante",
+      "image": "fondos-banco.jpg"
+    },
+    {
+      "id": "plancha-rotacion",
+      "name": "Plancha con rotación",
+      "muscleGroups": ["Core", "Oblicuos", "Estabilizadores"],
+      "description": "Comienza en posición de plancha frontal sobre los antebrazos. Gira el cuerpo hacia un lado, extendiendo el brazo superior hacia el techo mientras mantienes el equilibrio. Regresa a la posición inicial y repite hacia el otro lado.",
+      "category": "Core",
+      "equipment": "Peso corporal",
+      "difficulty": "Intermedio",
+      "image": "plancha-rotacion.jpg"
+    },
+    {
+      "id": "jalon-pecho",
+      "name": "Jalón al pecho",
+      "muscleGroups": ["Dorsal", "Bíceps", "Romboides"],
+      "description": "Siéntate en la máquina con los muslos bajo los soportes. Agarra la barra con las manos a una distancia mayor que la anchura de los hombros. Tira de la barra hacia abajo hasta que toque la parte superior del pecho, manteniendo la espalda recta.",
+      "category": "Espalda",
+      "equipment": "Máquina",
+      "difficulty": "Principiante",
+      "image": "jalon-pecho.jpg"
+    },
+    {
+      "id": "remo-maquina",
+      "name": "Remo en máquina",
+      "muscleGroups": ["Dorsal", "Romboides", "Trápezos"],
+      "description": "Siéntate en la máquina con el pecho apoyado en el soporte. Agarra las manijas y tira hacia atrás, llevando los codos hacia atrás y juntando las escápulas. Regresa controladamente a la posición inicial.",
+      "category": "Espalda",
+      "equipment": "Máquina",
+      "difficulty": "Principiante",
+      "image": "remo-maquina.jpg"
+    },
+    {
+      "id": "remo-inclinado",
+      "name": "Remo inclinado con mancuernas",
+      "muscleGroups": ["Dorsal", "Romboides", "Bíceps"],
+      "description": "Inclina el torso hacia adelante con las rodillas ligeramente flexionadas, manteniendo la espalda recta. Sujeta una mancuerna en cada mano con los brazos extendidos. Tira de las mancuernas hacia arriba, llevando los codos hacia el techo y juntando las escápulas.",
+      "category": "Espalda",
+      "equipment": "Mancuernas",
+      "difficulty": "Intermedio",
+      "image": "remo-inclinado.jpg"
+    },
+    {
+      "id": "curl-biceps",
+      "name": "Curl de bíceps con polea",
+      "muscleGroups": ["Bíceps"],
+      "description": "De pie frente a la polea baja, agarra la barra con las manos a la anchura de los hombros. Mantén los codos pegados al cuerpo y flexiona los antebrazos para llevar la barra hacia los hombros. Baja lentamente a la posición inicial.",
+      "category": "Brazos",
+      "equipment": "Polea",
+      "difficulty": "Principiante",
+      "image": "curl-biceps.jpg"
+    },
+    {
+      "id": "curl-arana",
+      "name": "Curl araña con mancuerna",
+      "muscleGroups": ["Bíceps"],
+      "description": "Siéntate en un banco inclinado con el pecho apoyado en el respaldo. Sujeta una mancuerna en cada mano con los brazos extendidos. Flexiona los codos para llevar las mancuernas hacia los hombros, manteniendo los codos fijos. Baja controladamente.",
+      "category": "Brazos",
+      "equipment": "Mancuernas",
+      "difficulty": "Intermedio",
+      "image": "curl-arana.jpg"
+    },
+    {
+      "id": "sentadilla-bulgara",
+      "name": "Sentadilla búlgara",
+      "muscleGroups": ["Cuádriceps", "Glúteos", "Equilibrio"],
+      "description": "De pie, coloca un pie detrás de ti sobre un banco. Sostén una mancuerna en cada mano. Flexiona la rodilla delantera para bajar el cuerpo, manteniendo la espalda recta. Empuja con el talón para volver a la posición inicial. Completa todas las repeticiones con una pierna antes de cambiar.",
+      "category": "Piernas",
+      "equipment": "Mancuernas, Banco",
+      "difficulty": "Avanzado",
+      "image": "sentadilla-bulgara.jpg"
+    },
+    {
+      "id": "balanceo-mancuerna",
+      "name": "Balanceo con mancuerna (Kettlebell Swing)",
+      "muscleGroups": ["Glúteos", "Isquiotibiales", "Core"],
+      "description": "De pie con los pies separados a la anchura de los hombros, sujeta una mancuerna o kettlebell con ambas manos. Flexiona ligeramente las rodillas e inclina el torso hacia adelante. Balancea la mancuerna entre las piernas y luego impulsa con las caderas para llevarla hacia adelante y arriba hasta la altura del pecho.",
+      "category": "Piernas",
+      "equipment": "Mancuerna, Kettlebell",
+      "difficulty": "Intermedio",
+      "image": "balanceo-mancuerna.jpg"
+    }
+  ],
+  "categories": [
+    "Piernas",
+    "Core",
+    "Pecho",
+    "Hombros",
+    "Brazos",
+    "Espalda"
+  ],
+  "muscleGroups": [
+    "Cuádriceps",
+    "Glúteos",
+    "Isquiotibiales",
+    "Core",
+    "Abdominales",
+    "Oblicuos",
+    "Estabilizadores",
+    "Pectoral",
+    "Deltoides",
+    "Deltoides anterior",
+    "Deltoides lateral",
+    "Tríceps",
+    "Dorsal",
+    "Romboides",
+    "Trápezos",
+    "Bíceps",
+    "Aductores",
+    "Glúteo medio",
+    "Estabilizadores de cadera",
+    "Equilibrio"
+  ],
+  "equipment": [
+    "Máquina",
+    "Mancuerna",
+    "Peso corporal",
+    "Barra",
+    "Mancuernas",
+    "Polea",
+    "Banco",
+    "Kettlebell"
+  ],
+  "difficulty": [
+    "Principiante",
+    "Intermedio",
+    "Avanzado"
+  ]
+}

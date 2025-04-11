@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Tracker - Creador de Rutinas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes slide-up {
+            0% {
+                opacity: 0;
+                transform: translateY(1rem);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse-button {
+            0% {
+                box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(22, 163, 74, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
+            }
+        }
+
+        #add-exercise {
+            animation: pulse-button 2s infinite;
+        }
+
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .animate-slide-up {
+            animation: slide-up 0.3s ease-out forwards;
+        }
+
+        .animate-fade-in {
+            animation: fade-in 0.5s ease-out forwards;
+        }
+
+        .exercise-card {
+            transition: all 0.3s ease;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .selected-exercise {
+            border-left: 4px solid #4F46E5;
+        }
+
+        .drag-handle {
+            cursor: grab;
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Barra superior para notificaciones -->
+    <div class="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-40 px-4 py-2 flex justify-end">
+        <button class="relative p-2 text-gray-600 hover:text-primary-600 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="container mx-auto px-4 py-6 pt-14 pb-20">
+        <!-- Pestañas de navegación -->
+        <div class="flex border-b border-gray-200 mb-6">
+            <a href="index.html" class="flex-1 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 text-center">
+                Entrenar
+            </a>
+            <a href="progress.html" class="flex-1 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 text-center">
+                Progreso
+            </a>
+            <a href="plan.html" class="flex-1 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 text-center">
+                Plan
+            </a>
+            <a href="exercise-library.html" class="flex-1 py-3 font-medium text-sm text-gray-500 hover:text-gray-700 text-center">
+                Ejercicios
+            </a>
+            <a href="create-routine.html" class="flex-1 py-3 font-medium text-sm text-primary-600 border-b-2 border-primary-600 text-center">
+                Crear Rutina
+            </a>
+        </div>
+
+        <h1 class="text-2xl font-bold mb-4">Creador de Rutinas</h1>
+
+        <!-- Formulario para la información de la rutina -->
+        <div class="bg-white rounded-xl shadow-card p-5 mb-6 border border-gray-100">
+            <h2 class="text-lg font-semibold mb-4">Información de la Rutina</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="routine-name" class="block text-sm font-medium text-gray-700 mb-1">Nombre de la Rutina</label>
+                    <input type="text" id="routine-name" placeholder="Ej: Mi Rutina de Fuerza" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all">
+                </div>
+
+                <div>
+                    <label for="routine-description" class="block text-sm font-medium text-gray-700 mb-1">Descripción (opcional)</label>
+                    <input type="text" id="routine-description" placeholder="Ej: Rutina para ganar fuerza y masa muscular" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all">
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <label for="routine-days" class="block text-sm font-medium text-gray-700 mb-1">Número de días</label>
+                <select id="routine-days" class="w-full md:w-1/4 border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all">
+                    <option value="1">1 día</option>
+                    <option value="2">2 días</option>
+                    <option value="3" selected>3 días</option>
+                    <option value="4">4 días</option>
+                    <option value="5">5 días</option>
+                    <option value="6">6 días</option>
+                    <option value="7">7 días</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Contenedor principal de dos columnas -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Columna izquierda: Filtro de ejercicios -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-xl shadow-card p-5 border border-gray-100">
+                    <h2 class="text-lg font-semibold mb-4">Filtro de Ejercicios</h2>
+
+                    <!-- Filtros -->
+                    <div class="mb-4">
+                        <label for="exercise-filter" class="block text-sm font-medium text-gray-700 mb-1">Filtrar por categoría</label>
+                        <select id="exercise-filter" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all">
+                            <option value="">Todas las categorías</option>
+                            <option value="Piernas">Piernas</option>
+                            <option value="Core">Core</option>
+                            <option value="Pecho">Pecho</option>
+                            <option value="Hombros">Hombros</option>
+                            <option value="Brazos">Brazos</option>
+                            <option value="Espalda">Espalda</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="exercise-search" class="block text-sm font-medium text-gray-700 mb-1">Buscar ejercicio</label>
+                        <input type="text" id="exercise-search" placeholder="Nombre del ejercicio..." class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all">
+                    </div>
+
+                    <!-- Lista de ejercicios filtrados -->
+                    <div class="mt-4 max-h-[500px] overflow-y-auto pr-2">
+                        <div id="exercise-list" class="space-y-3">
+                            <!-- Los ejercicios filtrados se cargarán dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna derecha: Rutina en construcción -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-card p-5 border border-gray-100">
+                    <h2 class="text-lg font-semibold mb-4">Mi Rutina</h2>
+
+                    <!-- Pestañas para los días -->
+                    <div class="flex overflow-x-auto pb-2 mb-4 border-b border-gray-200" id="days-tabs">
+                        <!-- Las pestañas se generarán dinámicamente -->
+                    </div>
+
+                    <!-- Contenido de los días -->
+                    <div id="days-content">
+                        <!-- El contenido de cada día se generará dinámicamente -->
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="mt-6 flex justify-end gap-3">
+                        <button id="clear-routine" class="px-5 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                            Limpiar
+                        </button>
+                        <button id="save-routine" class="px-5 py-3 bg-primary-600 text-white rounded-lg font-medium shadow-button hover:bg-primary-700 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50">
+                            Guardar Rutina
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para configurar ejercicio -->
+    <div id="exercise-config-modal" class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center hidden backdrop-blur-sm transition-all duration-300">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="modal-container">
+            <div class="sticky top-0 bg-white z-10 border-b border-gray-100 rounded-t-xl">
+                <div class="flex justify-between items-center p-4">
+                    <h2 id="modal-title" class="text-xl font-bold text-gray-800 border-b-2 border-primary-500 pb-1 inline-block">Configurar Ejercicio</h2>
+                    <button id="close-modal" class="text-gray-500 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <div id="modal-content" class="animate-fade-in">
+                    <div class="mb-4">
+                        <h3 id="exercise-name" class="text-lg font-semibold text-gray-800 mb-2">Nombre del Ejercicio</h3>
+                        <div id="exercise-tags" class="flex flex-wrap mb-2"></div>
+                        <p id="exercise-description" class="text-gray-600 mb-4">Descripción del ejercicio...</p>
+
+                        <div class="grid grid-cols-2 gap-2 mb-4 bg-gray-50 p-3 rounded-lg">
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                </svg>
+                                <span class="text-sm text-gray-700" id="exercise-category">Categoría</span>
+                            </div>
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                                </svg>
+                                <span class="text-sm text-gray-700" id="exercise-equipment">Equipo</span>
+                            </div>
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                                <span class="text-sm text-gray-700" id="exercise-difficulty">Dificultad</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label for="exercise-sets" class="block text-sm font-medium text-gray-700 mb-1">Series</label>
+                                <input type="number" id="exercise-sets" min="1" max="10" value="3" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all">
+                            </div>
+
+                            <div>
+                                <label for="exercise-rest" class="block text-sm font-medium text-gray-700 mb-1">Descanso (segundos)</label>
+                                <input type="number" id="exercise-rest" min="0" max="300" step="15" value="60" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Rango de Repeticiones</label>
+                            <div class="flex items-center gap-2">
+                                <input type="number" id="exercise-reps-min" min="1" max="50" value="8" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all">
+                                <span class="text-gray-500">a</span>
+                                <input type="number" id="exercise-reps-max" min="1" max="50" value="12" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Rango de Peso (kg)</label>
+                            <div class="flex items-center gap-2">
+                                <input type="number" id="exercise-weight-min" min="0" max="500" step="2.5" value="10" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all">
+                                <span class="text-gray-500">a</span>
+                                <input type="number" id="exercise-weight-max" min="0" max="500" step="2.5" value="15" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="exercise-notes" class="block text-sm font-medium text-gray-700 mb-1">Notas (opcional)</label>
+                            <textarea id="exercise-notes" rows="2" placeholder="Ej: Mantener la espalda recta durante el ejercicio" class="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end gap-4 mt-8 border-t pt-6 border-gray-200">
+                        <button id="cancel-config" class="px-5 py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                            Cancelar
+                        </button>
+                        <button id="add-exercise" class="px-6 py-3 bg-green-600 text-white rounded-lg font-bold text-lg shadow-xl hover:bg-green-700 transition-all focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 transform hover:scale-105 flex items-center border-2 border-green-500 relative overflow-hidden group">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Agregar a la Rutina
+                            <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barra de navegación -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-gray-900 p-2 border-t border-gray-800 backdrop-blur-md bg-opacity-90 z-50">
+        <div class="container mx-auto max-w-md">
+            <div class="flex justify-around items-center">
+                <a href="index.html" class="flex flex-col items-center p-3 rounded-xl transition-all duration-300 text-gray-300 hover:bg-primary-700/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                    </svg>
+                    <span class="text-xs mt-1 font-medium">Entrenar</span>
+                </a>
+                <a href="progress.html" class="flex flex-col items-center p-3 rounded-xl transition-all duration-300 text-gray-300 hover:bg-primary-700/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    <span class="text-xs mt-1 font-medium">Progreso</span>
+                </a>
+                <a href="plan.html" class="flex flex-col items-center p-3 rounded-xl transition-all duration-300 text-gray-300 hover:bg-primary-700/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span class="text-xs mt-1 font-medium">Plan</span>
+                </a>
+                <a href="exercise-library.html" class="flex flex-col items-center p-3 rounded-xl transition-all duration-300 text-gray-300 hover:bg-primary-700/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    <span class="text-xs mt-1 font-medium">Ejercicios</span>
+                </a>
+                <a href="create-routine.html" class="flex flex-col items-center p-3 rounded-xl transition-all duration-300 bg-primary-600 text-white shadow-button transform scale-105">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span class="text-xs mt-1 font-medium">Crear Rutina</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="js/routine-creator-simple.js"></script>
+</body>
+</html>
