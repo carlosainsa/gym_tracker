@@ -1,12 +1,55 @@
-# React + Vite
+# Gym Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Una aplicación web para seguimiento de entrenamiento en gimnasio, desarrollada con React + Vite.
 
-Currently, two official plugins are available:
+## Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Plan de Entrenamiento**: Visualiza y sigue tu plan de entrenamiento personalizado
+- **Biblioteca de Ejercicios**: Explora una amplia biblioteca de ejercicios con descripciones detalladas
+- **Seguimiento de Progreso**: Registra tus entrenamientos y visualiza tu progreso
+- **Creación de Rutinas**: Crea tus propias rutinas personalizadas
+- **Interfaz Móvil**: Diseñada para ser usada desde tu celular en el gimnasio
+- **Almacenamiento Local**: Guarda tus datos localmente en tu dispositivo
 
-## Expanding the ESLint configuration
+## Tecnologías Utilizadas
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **React**: Biblioteca de JavaScript para construir interfaces de usuario
+- **Vite**: Herramienta de construcción rápida para aplicaciones web modernas
+- **Tailwind CSS**: Framework de CSS para diseño rápido y responsivo
+- **Chart.js**: Biblioteca para crear gráficos interactivos
+- **React Router**: Enrutamiento para aplicaciones React
+- **LocalStorage**: API para almacenamiento local en el navegador
+
+## Cómo Usar
+
+1. Visita la aplicación en [https://carlosainsa.github.io/gym_tracker/](https://carlosainsa.github.io/gym_tracker/)
+2. Explora las diferentes secciones: Entrenar, Progreso, Plan, Ejercicios
+3. Registra tus entrenamientos haciendo clic en el botón "+" en cada ejercicio
+4. Visualiza tu progreso en la sección "Progreso"
+5. Crea tus propias rutinas en la sección "Crear Rutina"
+
+## Desarrollo Local
+
+Para ejecutar la aplicación localmente:
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/carlosainsa/gym_tracker.git
+
+# Navegar al directorio del proyecto
+cd gym_tracker
+
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo
+npm run dev
+```
+
+## Contribuciones
+
+Las contribuciones son bienvenidas. Por favor, abre un issue o un pull request para sugerencias o mejoras.
+
+## Licencia
+
+Este proyecto está licenciado bajo la Licencia MIT - ver el archivo LICENSE para más detalles.

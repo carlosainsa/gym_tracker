@@ -1,120 +1,75 @@
 // Datos del plan de entrenamiento
-export const workoutPlan = {
-  name: "Plan de Entrenamiento Personalizado",
-  phases: [
-    {
-      name: "Fase 1",
-      weeks: "1-4",
-      description: "Adaptación y base"
-    },
-    {
-      name: "Fase 2",
-      weeks: "5-8",
-      description: "Progresión de carga"
-    },
-    {
-      name: "Fase 3",
-      weeks: "9-12",
-      description: "Intensificación"
-    }
-  ],
-  days: [
+export const workoutPlan = [
     {
       id: 1,
       name: "Día 1: Piernas + Core",
       recommendedDay: "Lunes",
+      phase: 1,
+      progress: 0,
       exercises: [
         {
           id: 1,
           name: "Prensa de piernas",
-          sets: 3,
-          reps: "12-15",
-          weight: "65-70 kg",
+          description: "Siéntate en la máquina con la espalda apoyada en el respaldo. Coloca los pies en la plataforma a la anchura de los hombros. Empuja la plataforma extendiendo las piernas y luego regresa controladamente a la posición inicial.",
+          muscleGroups: ["Cuádriceps", "Glúteos", "Isquiotibiales"],
+          category: "Piernas",
+          equipment: "Máquina",
           rest: "75 seg",
-          phase1: {
-            sets: 3,
-            reps: "12-15",
-            weight: "65-70 kg"
-          },
-          phase2: {
-            sets: 3,
-            reps: "10-12",
-            weight: "75-80 kg"
-          },
-          phase3: {
-            sets: 4,
-            reps: "8-10",
-            weight: "85-90 kg"
-          }
+          progress: 0,
+          sets: [
+            { reps: "12-15", weight: 65 },
+            { reps: "12-15", weight: 67.5 },
+            { reps: "12-15", weight: 70 }
+          ],
+          actualSets: []
         },
         {
           id: 2,
           name: "Sentadilla Goblet con mancuerna",
-          sets: 3,
-          reps: "10-12",
-          weight: "12-15 kg",
+          description: "Sujeta una mancuerna verticalmente contra el pecho, con los codos hacia abajo. Separa los pies a la anchura de los hombros y realiza una sentadilla manteniendo la espalda recta.",
+          muscleGroups: ["Cuádriceps", "Glúteos", "Core"],
+          category: "Piernas",
+          equipment: "Mancuerna",
           rest: "75 seg",
-          phase1: {
-            sets: 3,
-            reps: "10-12",
-            weight: "12-15 kg"
-          },
-          phase2: {
-            sets: 3,
-            reps: "10-12",
-            weight: "15-18 kg"
-          },
-          phase3: {
-            sets: 4,
-            reps: "8-10",
-            weight: "18-22 kg"
-          }
+          progress: 0,
+          sets: [
+            { reps: "10-12", weight: 12 },
+            { reps: "10-12", weight: 14 },
+            { reps: "10-12", weight: 15 }
+          ],
+          actualSets: []
         },
         {
           id: 3,
           name: "Extensión de piernas",
-          sets: 3,
-          reps: "12-15",
-          weight: "40-45 kg",
+          description: "Siéntate en la máquina con la espalda apoyada en el respaldo. Coloca los tobillos detrás del rodillo acolchado. Extiende las piernas hasta que estén completamente rectas y luego baja controladamente.",
+          muscleGroups: ["Cuádriceps"],
+          category: "Piernas",
+          equipment: "Máquina",
           rest: "60 seg",
-          phase1: {
-            sets: 3,
-            reps: "12-15",
-            weight: "40-45 kg"
-          },
-          phase2: {
-            sets: 3,
-            reps: "10-12",
-            weight: "45-50 kg"
-          },
-          phase3: {
-            sets: 4,
-            reps: "8-10",
-            weight: "50-55 kg"
-          }
+          progress: 0,
+          sets: [
+            { reps: "12-15", weight: 40 },
+            { reps: "12-15", weight: 42.5 },
+            { reps: "12-15", weight: 45 }
+          ],
+          actualSets: []
         },
         {
           id: 4,
           name: "Curl femoral tumbado",
-          sets: 3,
-          reps: "12-15",
-          weight: "40-45 kg",
+          description: "Túmbate boca abajo en la máquina con los tobillos debajo del rodillo acolchado. Flexiona las piernas llevando los talones hacia los glúteos y luego baja controladamente.",
+          muscleGroups: ["Isquiotibiales", "Glúteos"],
+          category: "Piernas",
+          equipment: "Máquina",
           rest: "60 seg",
-          phase1: {
-            sets: 3,
-            reps: "12-15",
-            weight: "40-45 kg"
-          },
-          phase2: {
-            sets: 3,
-            reps: "10-12",
-            weight: "45-50 kg"
-          },
-          phase3: {
-            sets: 4,
-            reps: "8-10",
-            weight: "50-55 kg"
-          }
+          progress: 0,
+          sets: [
+            { reps: "12-15", weight: 40 },
+            { reps: "12-15", weight: 42.5 },
+            { reps: "12-15", weight: 45 }
+          ],
+          actualSets: []
         },
         {
           id: 5,
@@ -214,6 +169,8 @@ export const workoutPlan = {
       id: 2,
       name: "Día 2: Pecho, Hombros y Tríceps",
       recommendedDay: "Miércoles",
+      phase: 1,
+      progress: 0,
       exercises: [
         {
           id: 9,
@@ -382,6 +339,8 @@ export const workoutPlan = {
       id: 3,
       name: "Día 3: Espalda, Bíceps y Complementos",
       recommendedDay: "Viernes",
+      phase: 1,
+      progress: 0,
       exercises: [
         {
           id: 16,
@@ -545,9 +504,58 @@ export const workoutPlan = {
           }
         }
       ]
+    },
+    // Fase 2
+    {
+      id: 4,
+      name: "Día 1: Piernas + Core (Fase 2)",
+      recommendedDay: "Lunes",
+      phase: 2,
+      progress: 0,
+      exercises: []
+    },
+    {
+      id: 5,
+      name: "Día 2: Pecho, Hombros y Tríceps (Fase 2)",
+      recommendedDay: "Miércoles",
+      phase: 2,
+      progress: 0,
+      exercises: []
+    },
+    {
+      id: 6,
+      name: "Día 3: Espalda, Bíceps y Complementos (Fase 2)",
+      recommendedDay: "Viernes",
+      phase: 2,
+      progress: 0,
+      exercises: []
+    },
+    // Fase 3
+    {
+      id: 7,
+      name: "Día 1: Piernas + Core (Fase 3)",
+      recommendedDay: "Lunes",
+      phase: 3,
+      progress: 0,
+      exercises: []
+    },
+    {
+      id: 8,
+      name: "Día 2: Pecho, Hombros y Tríceps (Fase 3)",
+      recommendedDay: "Miércoles",
+      phase: 3,
+      progress: 0,
+      exercises: []
+    },
+    {
+      id: 9,
+      name: "Día 3: Espalda, Bíceps y Complementos (Fase 3)",
+      recommendedDay: "Viernes",
+      phase: 3,
+      progress: 0,
+      exercises: []
     }
-  ]
-};
+];
 
 // Estructura para almacenar los registros de entrenamiento
 export const emptyWorkoutLog = {
