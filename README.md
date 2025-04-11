@@ -1,6 +1,6 @@
 # Gym Tracker
 
-Una aplicación web para seguimiento de entrenamiento en gimnasio, desarrollada con React + Vite.
+Una aplicación web para seguimiento de entrenamiento en gimnasio, desarrollada con React + Vite. Disponible en GitHub Pages.
 
 ## Características
 
