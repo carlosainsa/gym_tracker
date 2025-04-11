@@ -5,15 +5,18 @@ on:
     branches:
       - master  # o main, dependiendo de cómo se llame tu rama principal
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
@@ -24,7 +27,8 @@ jobs:
         run: npm run build
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages  # La rama donde se desplegará el sitio
           folder: dist  # La carpeta que contiene tu aplicación compilada
+          clean: true  # Limpia la rama gh-pages antes de desplegar
