@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useWorkout } from '../context/WorkoutContext';
 import ExerciseProgress from '../components/ExerciseProgress';
-import ExportData from '../components/ExportData';
-import { FaChartLine, FaArrowLeft, FaCalendarAlt, FaDumbbell, FaListUl } from 'react-icons/fa';
+import DataSync from '../components/DataSync';
+import { FaChartLine, FaArrowLeft, FaCalendarAlt, FaDumbbell, FaListUl, FaHistory, FaWeight, FaFire } from 'react-icons/fa';
 
 const ProgressPage = () => {
   const { plan, workoutLogs } = useWorkout();
@@ -42,9 +42,7 @@ const ProgressPage = () => {
     <div className="container mx-auto px-4 py-6 pt-14 pb-20">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Tu Progreso</h1>
-        {workoutLogs.logs.length > 0 && !selectedExercise && (
-          <ExportData />
-        )}
+        <DataSync />
       </div>
 
       {workoutLogs.logs.length === 0 ? (
