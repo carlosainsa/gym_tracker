@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useWorkout } from '../context/WorkoutContext';
-import { FaCalendarDay, FaCheckCircle, FaArrowRight, FaInfoCircle, FaHistory } from 'react-icons/fa';
+import { FaCalendarDay, FaCheckCircle, FaArrowRight, FaInfoCircle, FaHistory, FaExchangeAlt, FaClock } from 'react-icons/fa';
+import { isChileanHoliday } from '../data/chileanHolidays';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -10,6 +11,16 @@ const HomePage = () => {
   const [todaysWorkout, setTodaysWorkout] = useState(null);
   const [recentWorkouts, setRecentWorkouts] = useState([]);
   const [completionRate, setCompletionRate] = useState(0);
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+  // Actualizar la fecha y hora cada minuto
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 60000); // Actualizar cada minuto
+
+    return () => clearInterval(timer);
+  }, []);
 
   // Filtrar los días del plan por la fase actual
   const currentPhaseDays = plan.filter(day => day.phase === currentPhase);
@@ -19,7 +30,8 @@ const HomePage = () => {
 
   // Calcular el día de la semana actual y determinar el entrenamiento recomendado
   useEffect(() => {
-    const today = new Date().getDay(); // 0 = Domingo, 1 = Lunes, etc.
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0 = Domingo, 1 = Lunes, etc.
     const dayMapping = {
       1: 'Lunes',
       2: 'Martes',
@@ -31,11 +43,14 @@ const HomePage = () => {
     };
 
     // Buscar un día recomendado para hoy
-    const todayName = dayMapping[today];
+    const todayName = dayMapping[dayOfWeek];
 
-    // Días de entrenamiento: Lunes (Día 1), Miércoles (Día 2), Viernes (Día 3)
-    // Días de descanso: Martes, Jueves, Sábado, Domingo
-    const isRestDay = ['Martes', 'Jueves', 'Sábado', 'Domingo'].includes(todayName);
+    // Verificar si hoy es un día feriado en Chile
+    const isHoliday = isChileanHoliday(today);
+
+    // Días de entrenamiento: Lunes, Miércoles, Viernes
+    // Días de descanso: Martes, Jueves, Sábado, Domingo y feriados
+    const isRestDay = ['Martes', 'Jueves', 'Sábado', 'Domingo'].includes(todayName) || isHoliday;
 
     if (isRestDay) {
       // Día de descanso
@@ -45,18 +60,29 @@ const HomePage = () => {
         setSelectedDayIndex(0);
       }
     } else {
-      // Día de entrenamiento
-      const recommendedIndex = currentPhaseDays.findIndex(day =>
-        day.recommendedDay && day.recommendedDay.includes(todayName)
-      );
+      // Día de entrenamiento - asignar según el día de la semana
+      let workoutIndex = 0;
 
-      if (recommendedIndex !== -1) {
-        setSelectedDayIndex(recommendedIndex);
-        setTodaysWorkout(currentPhaseDays[recommendedIndex]);
-      } else if (currentPhaseDays.length > 0) {
-        // Si no hay día recomendado pero hay días disponibles, mostrar el primero
-        setSelectedDayIndex(0);
-        setTodaysWorkout(currentPhaseDays[0]);
+      if (dayOfWeek === 1) { // Lunes - Piernas + Core (Entrenamiento 1)
+        workoutIndex = currentPhaseDays.findIndex(day => day.name.includes('Piernas'));
+      } else if (dayOfWeek === 3) { // Miércoles - Pecho, Hombros y Tríceps (Entrenamiento 2)
+        workoutIndex = currentPhaseDays.findIndex(day => day.name.includes('Pecho'));
+      } else if (dayOfWeek === 5) { // Viernes - Espalda, Bíceps y Complementos (Entrenamiento 3)
+        workoutIndex = currentPhaseDays.findIndex(day => day.name.includes('Espalda'));
+      }
+
+      // Si no se encuentra el entrenamiento específico, usar el índice del día de la semana
+      if (workoutIndex === -1) {
+        // Calcular índice basado en el día de la semana (1->0, 3->1, 5->2)
+        workoutIndex = Math.floor((dayOfWeek - 1) / 2);
+        // Asegurarse de que el índice esté dentro del rango válido
+        workoutIndex = Math.min(workoutIndex, currentPhaseDays.length - 1);
+        workoutIndex = Math.max(0, workoutIndex);
+      }
+
+      if (currentPhaseDays.length > 0) {
+        setSelectedDayIndex(workoutIndex);
+        setTodaysWorkout(currentPhaseDays[workoutIndex]);
       } else {
         setTodaysWorkout(null);
       }
@@ -77,7 +103,7 @@ const HomePage = () => {
     }
   }, [currentPhase, currentPhaseDays, workoutLogs, selectedDayIndex]);
 
-  // Formatear fecha
+  // Formatear fecha para logs
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('es-ES', {
@@ -88,17 +114,43 @@ const HomePage = () => {
     });
   };
 
+  // Formatear fecha actual
+  const formatCurrentDate = (date) => {
+    const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const dayName = dayNames[date.getDay()];
+
+    return `${dayName}, ${date.toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'short'
+    })} ${date.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit'
+    })}`;
+  };
+
   return (
     <div className="container mx-auto px-4 py-6 pt-16 pb-24 max-w-lg">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800">Bienvenido a Gym Tracker</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-800">Bienvenido a Gym Tracker</h1>
+      </div>
+
+      {/* Fecha y hora actual */}
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6 text-center">
+        <div className="flex items-center justify-center text-lg text-gray-700">
+          <FaClock className="mr-2 text-primary-500" />
+          <span>{formatCurrentDate(currentDateTime)}</span>
+        </div>
+      </div>
 
       {/* Resumen de progreso */}
       <div className="bg-white rounded-xl shadow-md p-5 mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold text-gray-800">Progreso Fase {currentPhase}</h2>
-          <span className="text-sm font-medium px-3 py-1 bg-primary-100 text-primary-800 rounded-full">
-            {completionRate}% completado
-          </span>
+        <div className="mb-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-lg font-semibold text-gray-800">Progreso Fase {currentPhase}</h2>
+            <span className="text-sm font-medium px-3 py-1 bg-primary-100 text-primary-800 rounded-full">
+              {completionRate}% completado
+            </span>
+          </div>
         </div>
 
         <div className="w-full bg-gray-200 rounded-full h-2.5">
@@ -119,7 +171,9 @@ const HomePage = () => {
         <div className="bg-white rounded-xl shadow-md p-5 mb-6">
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="font-semibold text-gray-800">{todaysWorkout.name}</h3>
+              <h3 className="font-semibold text-gray-800">
+                {todaysWorkout.name.replace(/Día (\d+)/, 'Entrenamiento $1')}
+              </h3>
               <p className="text-sm text-gray-600 mt-1">{todaysWorkout.description || 'Sin descripción'}</p>
 
               <div className="mt-3 flex items-center text-sm">
@@ -134,21 +188,25 @@ const HomePage = () => {
             <button
               onClick={() => {
                 try {
-                  // Extraer el número del día directamente del nombre (Día 1, Día 2, Día 3)
-                  const match = todaysWorkout.name.match(/Día (\d+)/);
-                  let dayNumber;
+                  // Extraer el número del entrenamiento
+                  let workoutNumber;
 
-                  if (match && match[1]) {
-                    // Si se encuentra el número en el nombre
-                    dayNumber = parseInt(match[1]);
+                  // Intentar extraer el número del nombre (Entrenamiento 1, 2, 3 o Día 1, 2, 3)
+                  const matchEntrenamiento = todaysWorkout.name.match(/Entrenamiento (\d+)/);
+                  const matchDia = todaysWorkout.name.match(/Día (\d+)/);
+
+                  if (matchEntrenamiento && matchEntrenamiento[1]) {
+                    workoutNumber = parseInt(matchEntrenamiento[1]);
+                  } else if (matchDia && matchDia[1]) {
+                    workoutNumber = parseInt(matchDia[1]);
                   } else {
                     // Alternativa: usar el índice + 1
-                    const dayIndex = currentPhaseDays.findIndex(d => d.id === todaysWorkout.id);
-                    dayNumber = dayIndex + 1;
+                    const workoutIndex = currentPhaseDays.findIndex(d => d.id === todaysWorkout.id);
+                    workoutNumber = workoutIndex + 1;
                   }
 
-                  console.log('HomePage - Navegando al entrenamiento de hoy:', todaysWorkout, 'Día:', dayNumber);
-                  navigate(`/workout/${dayNumber}`);
+                  console.log('HomePage - Navegando al entrenamiento de hoy:', todaysWorkout, 'Entrenamiento:', workoutNumber);
+                  navigate(`/workout/${workoutNumber}`);
                 } catch (err) {
                   console.error('Error al navegar al entrenamiento de hoy:', err);
                   // Navegar al primer día como fallback
@@ -199,8 +257,8 @@ const HomePage = () => {
 
       {/* Otros entrenamientos */}
       <h2 className="text-lg font-semibold mb-3 text-gray-800 flex items-center">
-        <FaCheckCircle className="mr-2 text-primary-600" />
-        Otras Rutinas
+        <FaExchangeAlt className="mr-2 text-primary-600" />
+        Cambiar Entrenamiento
       </h2>
 
       <div className="bg-white rounded-xl shadow-md overflow-hidden mb-6">
@@ -212,7 +270,9 @@ const HomePage = () => {
             >
               <div className="flex justify-between items-center">
                 <div onClick={() => setSelectedDayIndex(index)} className="flex-1 cursor-pointer">
-                  <h3 className="font-medium text-gray-800">{day.name}</h3>
+                  <h3 className="font-medium text-gray-800">
+                    {day.name.replace(/Día (\d+)/, 'Entrenamiento $1')}
+                  </h3>
                   <p className="text-xs text-gray-500 mt-0.5">
                     {day.recommendedDay || 'Flexible'} • {day.exercises.length} ejercicios
                   </p>
@@ -227,17 +287,17 @@ const HomePage = () => {
                   <button
                     onClick={() => {
                       try {
-                        // Obtener el índice del día en la lista de días de la fase actual
-                        const dayIndex = currentPhaseDays.findIndex(d => d.id === day.id);
+                        // Obtener el índice del entrenamiento en la lista de entrenamientos de la fase actual
+                        const workoutIndex = currentPhaseDays.findIndex(d => d.id === day.id);
 
-                        if (dayIndex === -1) {
-                          throw new Error(`No se encontró el día con ID ${day.id}`);
+                        if (workoutIndex === -1) {
+                          throw new Error(`No se encontró el entrenamiento con ID ${day.id}`);
                         }
 
-                        // Usar el índice + 1 como número de día (1, 2, 3)
-                        const dayNumber = dayIndex + 1;
-                        console.log('HomePage - Navegando a otra rutina:', day, 'Día:', dayNumber);
-                        navigate(`/workout/${dayNumber}`);
+                        // Usar el índice + 1 como número de entrenamiento (1, 2, 3)
+                        const workoutNumber = workoutIndex + 1;
+                        console.log('HomePage - Navegando a otro entrenamiento:', day, 'Entrenamiento:', workoutNumber);
+                        navigate(`/workout/${workoutNumber}`);
                       } catch (err) {
                         console.error('Error al navegar a otra rutina:', err);
                         alert(`Error al navegar: ${err.message}`);

@@ -2,7 +2,7 @@
 export const workoutPlan = [
     {
       id: 1,
-      name: "Día 1: Piernas + Core",
+      name: "Entrenamiento 1: Piernas + Core",
       recommendedDay: "Lunes",
       phase: 1,
       progress: 0,
@@ -167,7 +167,7 @@ export const workoutPlan = [
     },
     {
       id: 2,
-      name: "Día 2: Pecho, Hombros y Tríceps",
+      name: "Entrenamiento 2: Pecho, Hombros y Tríceps",
       recommendedDay: "Miércoles",
       phase: 1,
       progress: 0,
@@ -337,7 +337,7 @@ export const workoutPlan = [
     },
     {
       id: 3,
-      name: "Día 3: Espalda, Bíceps y Complementos",
+      name: "Entrenamiento 3: Espalda, Bíceps y Complementos",
       recommendedDay: "Viernes",
       phase: 1,
       progress: 0,
@@ -508,7 +508,7 @@ export const workoutPlan = [
     // Fase 2
     {
       id: 4,
-      name: "Día 1: Piernas + Core (Fase 2)",
+      name: "Entrenamiento 1: Piernas + Core (Fase 2)",
       recommendedDay: "Lunes",
       phase: 2,
       progress: 0,
@@ -516,7 +516,7 @@ export const workoutPlan = [
     },
     {
       id: 5,
-      name: "Día 2: Pecho, Hombros y Tríceps (Fase 2)",
+      name: "Entrenamiento 2: Pecho, Hombros y Tríceps (Fase 2)",
       recommendedDay: "Miércoles",
       phase: 2,
       progress: 0,
@@ -524,7 +524,7 @@ export const workoutPlan = [
     },
     {
       id: 6,
-      name: "Día 3: Espalda, Bíceps y Complementos (Fase 2)",
+      name: "Entrenamiento 3: Espalda, Bíceps y Complementos (Fase 2)",
       recommendedDay: "Viernes",
       phase: 2,
       progress: 0,
@@ -533,7 +533,7 @@ export const workoutPlan = [
     // Fase 3
     {
       id: 7,
-      name: "Día 1: Piernas + Core (Fase 3)",
+      name: "Entrenamiento 1: Piernas + Core (Fase 3)",
       recommendedDay: "Lunes",
       phase: 3,
       progress: 0,
@@ -541,7 +541,7 @@ export const workoutPlan = [
     },
     {
       id: 8,
-      name: "Día 2: Pecho, Hombros y Tríceps (Fase 3)",
+      name: "Entrenamiento 2: Pecho, Hombros y Tríceps (Fase 3)",
       recommendedDay: "Miércoles",
       phase: 3,
       progress: 0,
@@ -549,7 +549,7 @@ export const workoutPlan = [
     },
     {
       id: 9,
-      name: "Día 3: Espalda, Bíceps y Complementos (Fase 3)",
+      name: "Entrenamiento 3: Espalda, Bíceps y Complementos (Fase 3)",
       recommendedDay: "Viernes",
       phase: 3,
       progress: 0,

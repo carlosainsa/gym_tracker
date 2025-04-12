@@ -72,8 +72,19 @@ export const WorkoutProvider = ({ children }) => {
 
   // Función para agregar un nuevo registro de entrenamiento
   const addWorkoutLog = (log) => {
+    // Asegurar que el log tenga timestamps
+    const now = new Date();
+    const enhancedLog = {
+      ...log,
+      id: Date.now(),
+      date: now.toISOString(),
+      startTime: log.startTime || now.toISOString(),
+      endTime: log.endTime || now.toISOString(),
+      duration: log.duration || 0
+    };
+
     setWorkoutLogs(prevLogs => ({
-      logs: [...prevLogs.logs, { ...log, id: Date.now(), date: new Date().toISOString() }]
+      logs: [...prevLogs.logs, enhancedLog]
     }));
 
     // Actualizar el progreso del ejercicio en el plan
@@ -83,9 +94,15 @@ export const WorkoutProvider = ({ children }) => {
   };
 
   // Función para actualizar el progreso de un ejercicio
-  const updateExerciseProgress = (exerciseId, actualSets) => {
+  const updateExerciseProgress = (exerciseId, actualSets, exerciseLog = null) => {
+    // Si se proporciona un log completo, agregarlo directamente
+    if (exerciseLog) {
+      addWorkoutLog(exerciseLog);
+    }
+
     setPlan(prevPlan => {
       const newPlan = [...prevPlan];
+      const now = new Date();
 
       // Buscar el ejercicio en todos los días del plan
       for (let i = 0; i < newPlan.length; i++) {
@@ -94,6 +111,9 @@ export const WorkoutProvider = ({ children }) => {
         if (exerciseIndex !== -1) {
           // Actualizar los valores reales
           newPlan[i].exercises[exerciseIndex].actualSets = actualSets;
+
+          // Registrar la última actualización
+          newPlan[i].exercises[exerciseIndex].lastUpdated = now.toISOString();
 
           // Calcular el progreso
           const exercise = newPlan[i].exercises[exerciseIndex];
@@ -118,6 +138,10 @@ export const WorkoutProvider = ({ children }) => {
 
           // Actualizar el progreso del día
           updateDayProgress(newPlan[i]);
+
+          // Registrar la última actualización del día
+          newPlan[i].lastUpdated = now.toISOString();
+
           break;
         }
       }
@@ -136,6 +160,9 @@ export const WorkoutProvider = ({ children }) => {
     day.progress = day.exercises.length > 0
       ? Math.round(totalProgress / day.exercises.length)
       : 0;
+
+    // Registrar la fecha de la última actualización
+    day.lastUpdated = new Date().toISOString();
   };
 
   // Función para obtener los registros de un ejercicio específico

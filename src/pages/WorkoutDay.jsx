@@ -10,6 +10,7 @@ const WorkoutDay = () => {
   const { plan, currentPhase } = useWorkout();
   const [day, setDay] = useState(null);
   const [error, setError] = useState(null);
+  const [workoutNumber, setWorkoutNumber] = useState(null);
 
   // Usar useEffect para cargar los datos y manejar errores
   useEffect(() => {
@@ -21,40 +22,41 @@ const WorkoutDay = () => {
         throw new Error('El plan de entrenamiento no es válido');
       }
 
-      // Filtrar los días del plan por la fase actual
-      const currentPhaseDays = plan.filter(d => d.phase === currentPhase);
-      console.log('WorkoutDay - Días de fase actual:', currentPhaseDays);
+      // Filtrar los entrenamientos del plan por la fase actual
+      const currentPhaseWorkouts = plan.filter(d => d.phase === currentPhase);
+      console.log('WorkoutDay - Entrenamientos de fase actual:', currentPhaseWorkouts);
 
-      if (!currentPhaseDays || currentPhaseDays.length === 0) {
-        throw new Error(`No hay días disponibles para la fase ${currentPhase}`);
+      if (!currentPhaseWorkouts || currentPhaseWorkouts.length === 0) {
+        throw new Error(`No hay entrenamientos disponibles para la fase ${currentPhase}`);
       }
 
-      // Convertir dayNumber a número
-      const dayNum = parseInt(dayNumber);
-      console.log('WorkoutDay - Número de día parseado:', dayNum);
+      // Convertir dayNumber a número (ahora es workoutNumber)
+      const workoutNum = parseInt(dayNumber);
+      console.log('WorkoutDay - Número de entrenamiento parseado:', workoutNum);
+      setWorkoutNumber(workoutNum);
 
-      if (isNaN(dayNum)) {
-        throw new Error(`Número de día inválido: ${dayNumber}`);
+      if (isNaN(workoutNum)) {
+        throw new Error(`Número de entrenamiento inválido: ${dayNumber}`);
       }
 
       // Calcular el índice (base 0)
-      const dayIndex = dayNum - 1;
-      console.log('WorkoutDay - Índice calculado:', dayIndex);
+      const workoutIndex = workoutNum - 1;
+      console.log('WorkoutDay - Índice calculado:', workoutIndex);
 
       // Verificar si el índice es válido
-      if (dayIndex < 0 || dayIndex >= currentPhaseDays.length) {
-        throw new Error(`Índice fuera de rango: ${dayIndex}`);
+      if (workoutIndex < 0 || workoutIndex >= currentPhaseWorkouts.length) {
+        throw new Error(`Índice fuera de rango: ${workoutIndex}`);
       }
 
-      // Obtener el día
-      const selectedDay = currentPhaseDays[dayIndex];
-      console.log('WorkoutDay - Día seleccionado:', selectedDay);
+      // Obtener el entrenamiento
+      const selectedWorkout = currentPhaseWorkouts[workoutIndex];
+      console.log('WorkoutDay - Entrenamiento seleccionado:', selectedWorkout);
 
-      if (!selectedDay) {
-        throw new Error(`No se encontró el día con índice ${dayIndex}`);
+      if (!selectedWorkout) {
+        throw new Error(`No se encontró el entrenamiento con índice ${workoutIndex}`);
       }
 
-      setDay(selectedDay);
+      setDay(selectedWorkout);
       setError(null);
     } catch (err) {
       console.error('Error en WorkoutDay:', err);
@@ -98,7 +100,9 @@ const WorkoutDay = () => {
         >
           <FaArrowLeft className="text-gray-700" />
         </button>
-        <h1 className="text-2xl font-bold text-gray-800 flex-1">{day.name}</h1>
+        <h1 className="text-2xl font-bold text-gray-800 flex-1">
+          {day.name.replace(/Día (\d+)/, 'Entrenamiento $1')}
+        </h1>
       </div>
 
       {/* Información del día */}
@@ -106,7 +110,9 @@ const WorkoutDay = () => {
         <div className="flex items-start">
           <FaCalendarDay className="text-primary-600 text-xl mt-1 mr-3" />
           <div>
-            <h2 className="text-xl font-semibold text-gray-800">{day.name}</h2>
+            <h2 className="text-xl font-semibold text-gray-800">
+              {day.name.replace(/Día (\d+)/, 'Entrenamiento $1')}
+            </h2>
             <p className="text-sm text-gray-600 mt-1">
               {day.recommendedDay || 'Flexible'} • {day.exercises.length} ejercicios
             </p>
