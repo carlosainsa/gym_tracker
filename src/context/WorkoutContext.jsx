@@ -39,6 +39,12 @@ export const WorkoutProvider = ({ children }) => {
   // Estado para la biblioteca de ejercicios
   const [exercises, setExercises] = useState(exerciseLibrary);
 
+  // Estado para el entrenamiento activo
+  const [activeWorkout, setActiveWorkout] = useState(() => {
+    const savedActiveWorkout = localStorage.getItem('activeWorkout');
+    return savedActiveWorkout ? JSON.parse(savedActiveWorkout) : null;
+  });
+
   // Guardar cambios en localStorage
   useEffect(() => {
     localStorage.setItem('workoutPlan', JSON.stringify(plan));
@@ -55,6 +61,14 @@ export const WorkoutProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('customRoutines', JSON.stringify(routines));
   }, [routines]);
+
+  useEffect(() => {
+    if (activeWorkout) {
+      localStorage.setItem('activeWorkout', JSON.stringify(activeWorkout));
+    } else {
+      localStorage.removeItem('activeWorkout');
+    }
+  }, [activeWorkout]);
 
   // Función para agregar un nuevo registro de entrenamiento
   const addWorkoutLog = (log) => {
@@ -168,6 +182,43 @@ export const WorkoutProvider = ({ children }) => {
     }
   };
 
+  // Función para establecer el entrenamiento activo
+  const setActiveWorkoutById = (workoutId) => {
+    console.log('Estableciendo entrenamiento activo con ID:', workoutId);
+    const workout = plan.find(day => day.id === workoutId);
+    if (workout) {
+      console.log('Entrenamiento encontrado:', workout);
+      setActiveWorkout(workout);
+      return true;
+    } else {
+      console.error('No se encontró el entrenamiento con ID:', workoutId);
+      return false;
+    }
+  };
+
+  // Función para obtener el entrenamiento recomendado para hoy
+  const getTodaysRecommendedWorkout = () => {
+    const today = new Date().getDay(); // 0 = Domingo, 1 = Lunes, etc.
+    const dayMapping = {
+      1: 'Lunes',
+      3: 'Miércoles',
+      5: 'Viernes'
+    };
+
+    // Si hoy es un día de entrenamiento (Lunes, Miércoles o Viernes)
+    if (dayMapping[today]) {
+      const todayName = dayMapping[today];
+      const currentPhaseDays = plan.filter(day => day.phase === currentPhase);
+      const recommendedWorkout = currentPhaseDays.find(day =>
+        day.recommendedDay && day.recommendedDay.includes(todayName)
+      );
+
+      return recommendedWorkout || null;
+    }
+
+    return null; // Día de descanso
+  };
+
   // Valores que se proporcionarán a través del contexto
   const value = {
     plan,
@@ -178,13 +229,17 @@ export const WorkoutProvider = ({ children }) => {
     routines,
     setRoutines,
     exercises,
+    activeWorkout,
+    setActiveWorkout,
     addWorkoutLog,
     getExerciseLogs,
     changePhase,
     saveRoutine,
     deleteRoutine,
     addDayToPlan,
-    updateExerciseProgress
+    updateExerciseProgress,
+    setActiveWorkoutById,
+    getTodaysRecommendedWorkout
   };
 
   return (
