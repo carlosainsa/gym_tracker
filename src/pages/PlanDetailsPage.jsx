@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { FaArrowLeft, FaCalendarAlt, FaDumbbell, FaChevronDown, FaChevronUp, FaEdit, FaChartLine, FaClipboardList, FaPlay, FaArchive, FaTrashAlt, FaExchangeAlt, FaFileImport, FaFileExport, FaRandom } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendarAlt, FaDumbbell, FaChevronDown, FaChevronUp, FaEdit, FaChartLine, FaClipboardList, FaPlay, FaArchive, FaTrashAlt, FaExchangeAlt, FaFileImport, FaFileExport, FaRandom, FaCopy } from 'react-icons/fa';
 import { useTraining } from '../context/TrainingContext';
+import { toast } from 'react-toastify';
 import ImportExportPlans from '../components/ImportExportPlans';
+import PlanDuplicateDialog from '../components/PlanDuplicateDialog';
+import PlanShareDialog from '../components/PlanShareDialog';
 
 /**
  * Página para ver los detalles de un plan de entrenamiento
@@ -17,6 +20,8 @@ const PlanDetailsPage = () => {
   const [expandedSessionId, setExpandedSessionId] = useState(null);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
+  const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
+  const [showShareDialog, setShowShareDialog] = useState(false);
 
   // Cargar el plan
   useEffect(() => {
@@ -81,6 +86,23 @@ const PlanDetailsPage = () => {
   // Ir a la página de transición de planes
   const handleTransitionPlan = () => {
     navigate(`/plan/transition/${planId}`);
+  };
+
+  // Mostrar el diálogo de duplicación de planes
+  const handleDuplicatePlan = () => {
+    setShowDuplicateDialog(true);
+  };
+
+  // Manejar el éxito de la duplicación
+  const handleDuplicateSuccess = (newPlan) => {
+    toast.success(`Plan "${newPlan.name}" duplicado correctamente`);
+    // Navegar al nuevo plan
+    navigate(`/plan/${newPlan.id}`);
+  };
+
+  // Mostrar el diálogo de compartición de planes
+  const handleSharePlan = () => {
+    setShowShareDialog(true);
   };
 
   // Formatear el día de la semana
@@ -222,6 +244,22 @@ const PlanDetailsPage = () => {
               >
                 <FaRandom className="mr-1.5" />
                 Crear Transición
+              </button>
+
+              <button
+                onClick={handleDuplicatePlan}
+                className="flex items-center text-xs px-3 py-1.5 rounded-lg bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 hover:bg-teal-100 dark:hover:bg-teal-800/50 transition-colors"
+              >
+                <FaCopy className="mr-1.5" />
+                Duplicar Plan
+              </button>
+
+              <button
+                onClick={handleSharePlan}
+                className="flex items-center text-xs px-3 py-1.5 rounded-lg bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 hover:bg-orange-100 dark:hover:bg-orange-800/50 transition-colors"
+              >
+                <FaExchangeAlt className="mr-1.5" />
+                Compartir Plan
               </button>
 
               {plan.id === activePlanId ? (
@@ -471,6 +509,23 @@ const PlanDetailsPage = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Diálogo de duplicación de plan */}
+      {showDuplicateDialog && plan && (
+        <PlanDuplicateDialog
+          plan={plan}
+          onClose={() => setShowDuplicateDialog(false)}
+          onSuccess={handleDuplicateSuccess}
+        />
+      )}
+
+      {/* Diálogo de compartición de plan */}
+      {showShareDialog && plan && (
+        <PlanShareDialog
+          plan={plan}
+          onClose={() => setShowShareDialog(false)}
+        />
       )}
     </div>
   );

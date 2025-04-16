@@ -24,6 +24,7 @@ import PlanStatsPage from './pages/PlanStatsPage';
 import PlanComparisonPage from './pages/PlanComparisonPage';
 import PlanTransitionPage from './pages/PlanTransitionPage';
 import PlanImportExportPage from './pages/PlanImportExportPage';
+import SharedPlanPage from './pages/SharedPlanPage';
 import ProgressPage from './pages/ProgressPage';
 import AdvancedProgressPage from './pages/AdvancedProgressPage';
 import TemplatesPage from './pages/TemplatesPage';
@@ -317,6 +318,18 @@ function App() {
                       </div>
                     </div>
                   </PrivateRoute>
+                } />
+
+                {/* Ruta pública para planes compartidos */}
+                <Route path="/shared/:shareId" element={
+                  <div>
+                    <Navbar />
+                    <InstallPWA />
+                    <DevModeNotice />
+                    <div className="container mx-auto px-4 py-8">
+                      <SharedPlanPage />
+                    </div>
+                  </div>
                 } />
                 <Route path="/workout/advanced/:sessionId" element={
                   <PrivateRoute>

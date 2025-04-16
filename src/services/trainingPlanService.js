@@ -1,5 +1,6 @@
 import { TrainingPlan, Microcycle, TrainingSession, Exercise, Set } from '../models/TrainingPlan';
 import { workoutPlan } from '../data/workoutPlan';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Servicio para gestionar planes de entrenamiento
@@ -98,6 +99,98 @@ class TrainingPlanService {
         intensityAdjustment
       }
     });
+  }
+
+  /**
+   * Duplica un plan de entrenamiento existente
+   * @param {TrainingPlan} sourcePlan - Plan de entrenamiento a duplicar
+   * @param {Object} options - Opciones de duplicación
+   * @returns {TrainingPlan} - Nuevo plan de entrenamiento duplicado
+   */
+  duplicatePlan(sourcePlan, options = {}) {
+    if (!sourcePlan) {
+      throw new Error('Se requiere un plan de origen para duplicar');
+    }
+
+    const {
+      name = `Copia de ${sourcePlan.name}`,
+      description = sourcePlan.description,
+      keepProgress = false,
+      resetDates = true
+    } = options;
+
+    // Crear un nuevo plan con un nuevo ID
+    const newPlan = new TrainingPlan({
+      ...sourcePlan,
+      id: uuidv4(),
+      name,
+      description,
+      status: 'available',
+      metadata: {
+        ...sourcePlan.metadata,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        originalPlanId: sourcePlan.id,
+        isDuplicate: true
+      }
+    });
+
+    // Duplicar microciclos
+    newPlan.microcycles = sourcePlan.microcycles.map(microcycle => {
+      // Crear un nuevo microciclo con un nuevo ID
+      const newMicrocycle = new Microcycle({
+        ...microcycle,
+        id: uuidv4(),
+        trainingSessions: []
+      });
+
+      // Duplicar sesiones de entrenamiento
+      newMicrocycle.trainingSessions = microcycle.trainingSessions.map(session => {
+        // Crear una nueva sesión con un nuevo ID
+        const newSession = new TrainingSession({
+          ...session,
+          id: uuidv4(),
+          exercises: []
+        });
+
+        // Duplicar ejercicios
+        newSession.exercises = session.exercises.map(exercise => {
+          // Crear un nuevo ejercicio con un nuevo ID
+          const newExercise = new Exercise({
+            ...exercise,
+            id: uuidv4(),
+            sets: []
+          });
+
+          // Duplicar series
+          newExercise.sets = exercise.sets.map(set => {
+            // Crear una nueva serie con un nuevo ID
+            const newSet = new Set({
+              ...set,
+              id: uuidv4()
+            });
+
+            // Resetear progreso si es necesario
+            if (!keepProgress) {
+              newSet.actualReps = null;
+              newSet.actualWeight = null;
+              newSet.completed = false;
+              newSet.notes = '';
+            }
+
+            return newSet;
+          });
+
+          return newExercise;
+        });
+
+        return newSession;
+      });
+
+      return newMicrocycle;
+    });
+
+    return newPlan;
   }
 
   /**

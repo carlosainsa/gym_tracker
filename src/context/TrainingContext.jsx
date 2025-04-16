@@ -620,6 +620,30 @@ export const TrainingProvider = ({ children }) => {
     }
   };
 
+  // Función para duplicar un plan de entrenamiento
+  const duplicatePlan = (planId, options = {}) => {
+    try {
+      // Buscar el plan a duplicar
+      const sourcePlan = trainingPlans.find(p => p.id === planId);
+      if (!sourcePlan) {
+        throw new Error('Plan no encontrado');
+      }
+
+      // Duplicar el plan
+      const duplicatedPlan = trainingPlanService.duplicatePlan(sourcePlan, options);
+
+      // Agregar el plan duplicado a la lista de planes
+      setTrainingPlans(prevPlans => {
+        return [...prevPlans, duplicatedPlan];
+      });
+
+      return duplicatedPlan;
+    } catch (error) {
+      console.error('Error al duplicar el plan:', error);
+      throw error;
+    }
+  };
+
   // Valores que se proporcionarán a través del contexto
   const value = {
     // Nuevos modelos
@@ -662,7 +686,10 @@ export const TrainingProvider = ({ children }) => {
 
     // Funciones de transición de planes
     createTransitionPlan,
-    analyzePlanForTransition
+    analyzePlanForTransition,
+
+    // Funciones de duplicación de planes
+    duplicatePlan
   };
 
   return (
