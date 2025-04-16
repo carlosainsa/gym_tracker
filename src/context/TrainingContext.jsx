@@ -541,14 +541,38 @@ export const TrainingProvider = ({ children }) => {
   // Función para importar un plan desde JSON
   const importPlanFromJson = (jsonString) => {
     try {
-      const importedPlan = importExportService.importPlanFromJson(jsonString);
+      const importedData = importExportService.importPlanFromJson(jsonString);
 
-      // Agregar el plan importado a la lista de planes
-      setTrainingPlans(prevPlans => {
-        return [...prevPlans, { ...importedPlan, status: 'available' }];
-      });
+      // Verificar si es un array de planes o un solo plan
+      if (Array.isArray(importedData)) {
+        // Agregar los planes importados a la lista de planes
+        setTrainingPlans(prevPlans => {
+          // Crear un mapa de IDs existentes para evitar duplicados
+          const existingIds = new Set(prevPlans.map(p => p.id));
 
-      return importedPlan;
+          // Filtrar planes duplicados y agregar los nuevos
+          const newPlans = importedData.filter(plan => !existingIds.has(plan.id));
+          return [...prevPlans, ...newPlans.map(plan => ({ ...plan, status: 'available' }))];
+        });
+
+        return importedData;
+      } else {
+        // Es un solo plan
+        const importedPlan = importedData;
+
+        // Agregar el plan importado a la lista de planes
+        setTrainingPlans(prevPlans => {
+          // Verificar si ya existe un plan con el mismo ID
+          if (prevPlans.some(p => p.id === importedPlan.id)) {
+            // Generar un nuevo ID para evitar duplicados
+            const newPlan = { ...importedPlan, id: Date.now().toString(), status: 'available' };
+            return [...prevPlans, newPlan];
+          }
+          return [...prevPlans, { ...importedPlan, status: 'available' }];
+        });
+
+        return importedPlan;
+      }
     } catch (error) {
       console.error('Error al importar el plan:', error);
       throw error;

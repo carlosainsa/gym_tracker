@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaPlus, FaChevronDown, FaChevronUp, FaCalendarAlt, FaEllipsisH, FaArchive, FaTrash, FaEye, FaChartLine, FaExchangeAlt, FaFileImport, FaFileExport } from 'react-icons/fa';
+import { FaPlus, FaChevronDown, FaChevronUp, FaCalendarAlt, FaEllipsisH, FaArchive, FaTrash, FaEye, FaChartLine, FaExchangeAlt, FaFileImport, FaFileExport, FaExternalLinkAlt } from 'react-icons/fa';
 import { useTraining } from '../context/TrainingContext';
 import ImportExportPlans from '../components/ImportExportPlans';
 
@@ -266,7 +266,13 @@ const PlansManagementPage = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Planes de Entrenamiento</h1>
         <div className="flex space-x-2">
-          <ImportExportPlans buttonStyle="small" />
+          <button
+            onClick={() => navigate('/plans/import-export')}
+            className="py-2 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center"
+          >
+            <FaExchangeAlt className="mr-2" />
+            Importar/Exportar
+          </button>
           <button
             onClick={() => navigate('/plan/config')}
             className="py-2 px-4 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center"
