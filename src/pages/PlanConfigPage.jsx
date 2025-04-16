@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaCheck, FaDumbbell, FaCalendarAlt, FaClock, FaWeight, FaRunning, FaChartLine, FaUserCog } from 'react-icons/fa';
+import { FaArrowLeft, FaCheck, FaDumbbell, FaCalendarAlt, FaClock, FaWeight, FaRunning, FaChartLine, FaUserCog, FaClone } from 'react-icons/fa';
 import { useTraining } from '../context/TrainingContext';
 import AdvancedConfigSection from '../components/AdvancedConfigSection';
 import PeriodizationConfig from '../components/PeriodizationConfig';
 import SplitConfig from '../components/SplitConfig';
 import EquipmentConfig from '../components/EquipmentConfig';
 import GoalConfig from '../components/GoalConfig';
+import TemplateSelector from '../components/TemplateSelector';
 
 const PlanConfigPage = () => {
   const navigate = useNavigate();
@@ -22,6 +23,8 @@ const PlanConfigPage = () => {
   const [trainingDays, setTrainingDays] = useState([1, 3, 5]); // Lunes, Miércoles, Viernes
   const [sessionDuration, setSessionDuration] = useState(60);
   const [availableEquipment, setAvailableEquipment] = useState(['all']);
+  const [planName, setPlanName] = useState('');
+  const [showTemplates, setShowTemplates] = useState(false);
 
   // Cargar preferencias actuales
   useEffect(() => {
@@ -42,6 +45,23 @@ const PlanConfigPage = () => {
 
 
 
+  // Manejar la selección de plantilla
+  const handleSelectTemplate = (template) => {
+    // Actualizar los estados con los valores de la plantilla
+    setPrimaryGoal(template.primaryGoal || 'hypertrophy');
+    setSecondaryGoals(template.secondaryGoals || []);
+    setPlanDuration(template.planDuration || 12);
+    setPeriodizationType(template.periodizationType || 'linear');
+    setWeeklyFrequency(template.weeklyFrequency || 3);
+    setSplitConfiguration(template.splitConfiguration || 'fullbody');
+    setTrainingDays(template.trainingDays || [1, 3, 5]);
+    setSessionDuration(template.sessionDuration || 60);
+    setPlanName(template.name || '');
+
+    // Ocultar la sección de plantillas
+    setShowTemplates(false);
+  };
+
   // Crear el plan
   const handleCreatePlan = () => {
     // Actualizar las preferencias del usuario
@@ -52,6 +72,7 @@ const PlanConfigPage = () => {
 
     // Crear el nuevo plan
     const planPreferences = {
+      name: planName,
       primaryGoal,
       secondaryGoals,
       planDuration,
@@ -66,6 +87,12 @@ const PlanConfigPage = () => {
     createNewPlan(planPreferences);
 
     // Navegar a la página principal
+    navigate('/');
+  };
+
+  // Crear plan a partir de plantilla
+  const handleCreatePlanFromTemplate = (plan) => {
+    createNewPlan(plan);
     navigate('/');
   };
 
@@ -87,6 +114,27 @@ const PlanConfigPage = () => {
 
       {/* Formulario de configuración */}
       <div className="space-y-6">
+        {/* Sección de plantillas */}
+        <AdvancedConfigSection
+          title="Plantillas de Entrenamiento"
+          icon={<FaClone />}
+          bgColor="bg-green-50 dark:bg-green-900"
+          borderColor="border-green-100 dark:border-green-800"
+          iconColor="text-green-500"
+          defaultExpanded={showTemplates}
+          tooltip="Selecciona una plantilla predefinida para crear rápidamente un plan de entrenamiento adaptado a tus objetivos."
+        >
+          <div className="mb-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Las plantillas te permiten crear planes de entrenamiento completos con un solo clic. Selecciona la que mejor se adapte a tus objetivos.
+            </p>
+            <TemplateSelector
+              onSelectTemplate={handleSelectTemplate}
+              onCreatePlan={handleCreatePlanFromTemplate}
+            />
+          </div>
+        </AdvancedConfigSection>
+
         {/* Objetivos */}
         <AdvancedConfigSection
           title="Objetivos de Entrenamiento"
@@ -185,6 +233,33 @@ const PlanConfigPage = () => {
             availableEquipment={availableEquipment}
             setAvailableEquipment={setAvailableEquipment}
           />
+        </AdvancedConfigSection>
+
+        {/* Nombre del plan */}
+        <AdvancedConfigSection
+          title="Nombre del Plan"
+          icon={<FaCalendarAlt />}
+          bgColor="bg-indigo-50 dark:bg-indigo-900"
+          borderColor="border-indigo-100 dark:border-indigo-800"
+          iconColor="text-indigo-500"
+          defaultExpanded={true}
+          tooltip="Asigna un nombre a tu plan de entrenamiento para identificarlo fácilmente."
+        >
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Nombre personalizado
+            </label>
+            <input
+              type="text"
+              value={planName}
+              onChange={(e) => setPlanName(e.target.value)}
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+              placeholder="Mi plan de entrenamiento"
+            />
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              Un nombre descriptivo te ayudará a identificar este plan entre otros que puedas crear.
+            </p>
+          </div>
         </AdvancedConfigSection>
 
         {/* Botón de crear plan */}
