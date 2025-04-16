@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { FaDumbbell, FaChartLine, FaCalendarAlt, FaBook, FaCog, FaClone } from 'react-icons/fa';
 import NotificationSystem from './NotificationSystem';
+import NavMenu from './NavMenu';
 
 const Navbar = () => {
   const location = useLocation();
@@ -33,7 +34,10 @@ const Navbar = () => {
           <FaCog />
           <span className="sr-only">Configuración</span>
         </Link>
-        <NotificationSystem />
+        <div className="flex items-center">
+          <NavMenu />
+          <NotificationSystem />
+        </div>
       </div>
 
       {/* Barra de navegación inferior */}

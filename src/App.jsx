@@ -25,6 +25,8 @@ import PlanComparisonPage from './pages/PlanComparisonPage';
 import PlanTransitionPage from './pages/PlanTransitionPage';
 import PlanImportExportPage from './pages/PlanImportExportPage';
 import SharedPlanPage from './pages/SharedPlanPage';
+import PlanSearchPage from './pages/PlanSearchPage';
+import SharedPlansSearchPage from './pages/SharedPlansSearchPage';
 import ProgressPage from './pages/ProgressPage';
 import AdvancedProgressPage from './pages/AdvancedProgressPage';
 import TemplatesPage from './pages/TemplatesPage';
@@ -320,7 +322,20 @@ function App() {
                   </PrivateRoute>
                 } />
 
-                {/* Ruta pública para planes compartidos */}
+                <Route path="/plans/search" element={
+                  <PrivateRoute>
+                    <div>
+                      <Navbar />
+                      <InstallPWA />
+                      <DevModeNotice />
+                      <div className="container mx-auto px-4 py-8">
+                        <PlanSearchPage />
+                      </div>
+                    </div>
+                  </PrivateRoute>
+                } />
+
+                {/* Rutas públicas para planes compartidos */}
                 <Route path="/shared/:shareId" element={
                   <div>
                     <Navbar />
@@ -328,6 +343,17 @@ function App() {
                     <DevModeNotice />
                     <div className="container mx-auto px-4 py-8">
                       <SharedPlanPage />
+                    </div>
+                  </div>
+                } />
+
+                <Route path="/shared" element={
+                  <div>
+                    <Navbar />
+                    <InstallPWA />
+                    <DevModeNotice />
+                    <div className="container mx-auto px-4 py-8">
+                      <SharedPlansSearchPage />
                     </div>
                   </div>
                 } />
