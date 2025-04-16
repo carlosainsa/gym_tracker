@@ -4,6 +4,7 @@ import { UserPreferences } from '../models/UserPreferences';
 import trainingPlanService from '../services/trainingPlanService';
 import userPreferencesService from '../services/userPreferencesService';
 import dataMigrationService from '../services/dataMigrationService';
+import importExportService from '../services/importExportService';
 import { useAuth } from './AuthContext';
 import { workoutPlan, emptyWorkoutLog } from '../data/workoutPlan';
 import { primerPlan } from '../data/primerPlan';
@@ -520,6 +521,39 @@ export const TrainingProvider = ({ children }) => {
     }
   };
 
+  // Función para exportar un plan a JSON
+  const exportPlanToJson = (planId) => {
+    const plan = planId ? trainingPlans.find(p => p.id === planId) : trainingPlan;
+    if (!plan) return null;
+
+    return importExportService.exportPlanToJson(plan);
+  };
+
+  // Función para descargar un plan como archivo JSON
+  const downloadPlanAsJson = (planId) => {
+    const plan = planId ? trainingPlans.find(p => p.id === planId) : trainingPlan;
+    if (!plan) return false;
+
+    return importExportService.downloadPlanAsJson(plan);
+  };
+
+  // Función para importar un plan desde JSON
+  const importPlanFromJson = (jsonString) => {
+    try {
+      const importedPlan = importExportService.importPlanFromJson(jsonString);
+
+      // Agregar el plan importado a la lista de planes
+      setTrainingPlans(prevPlans => {
+        return [...prevPlans, { ...importedPlan, status: 'available' }];
+      });
+
+      return importedPlan;
+    } catch (error) {
+      console.error('Error al importar el plan:', error);
+      throw error;
+    }
+  };
+
   // Valores que se proporcionarán a través del contexto
   const value = {
     // Nuevos modelos
@@ -553,7 +587,12 @@ export const TrainingProvider = ({ children }) => {
     expandedDay,
     setExpandedDay,
     importData,
-    loading
+    loading,
+
+    // Funciones de importación/exportación
+    exportPlanToJson,
+    downloadPlanAsJson,
+    importPlanFromJson
   };
 
   return (

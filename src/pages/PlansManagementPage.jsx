@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaPlus, FaChevronDown, FaChevronUp, FaCalendarAlt, FaEllipsisH, FaArchive, FaTrash, FaEye, FaChartLine, FaExchangeAlt } from 'react-icons/fa';
+import { FaPlus, FaChevronDown, FaChevronUp, FaCalendarAlt, FaEllipsisH, FaArchive, FaTrash, FaEye, FaChartLine, FaExchangeAlt, FaFileImport, FaFileExport } from 'react-icons/fa';
 import { useTraining } from '../context/TrainingContext';
+import ImportExportPlans from '../components/ImportExportPlans';
 
 /**
  * Página para gestionar los planes de entrenamiento
@@ -264,13 +265,16 @@ const PlansManagementPage = () => {
     <div className="container mx-auto px-4 py-6 pt-14 pb-20">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Planes de Entrenamiento</h1>
-        <button
-          onClick={() => navigate('/plan/config')}
-          className="py-2 px-4 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center"
-        >
-          <FaPlus className="mr-2" />
-          Crear Plan
-        </button>
+        <div className="flex space-x-2">
+          <ImportExportPlans buttonStyle="small" />
+          <button
+            onClick={() => navigate('/plan/config')}
+            className="py-2 px-4 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center"
+          >
+            <FaPlus className="mr-2" />
+            Crear Plan
+          </button>
+        </div>
       </div>
 
       {/* Planes activos */}

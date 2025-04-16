@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { FaArrowLeft, FaCalendarAlt, FaDumbbell, FaChevronDown, FaChevronUp, FaEdit, FaChartLine, FaClipboardList, FaPlay, FaArchive, FaTrashAlt, FaExchangeAlt } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendarAlt, FaDumbbell, FaChevronDown, FaChevronUp, FaEdit, FaChartLine, FaClipboardList, FaPlay, FaArchive, FaTrashAlt, FaExchangeAlt, FaFileImport, FaFileExport } from 'react-icons/fa';
 import { useTraining } from '../context/TrainingContext';
+import ImportExportPlans from '../components/ImportExportPlans';
 
 /**
  * Página para ver los detalles de un plan de entrenamiento
@@ -235,6 +236,10 @@ const PlanDetailsPage = () => {
                 <FaTrashAlt className="mr-1.5" />
                 Eliminar Plan
               </button>
+            </div>
+
+            <div className="mt-3">
+              <ImportExportPlans planId={planId} buttonStyle="small" />
             </div>
           </div>
         </div>
