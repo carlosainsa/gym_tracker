@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca de Ejercicios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slideDown {
+            animation: slideDown 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <div class="animate-fadeIn">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-800">Biblioteca de Ejercicios</h1>
+                <div class="flex gap-2">
+                    <button class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Recargar Datos
+                    </button>
+                    <button class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                        </svg>
+                        Mostrar Filtros
+                    </button>
+                </div>
+            </div>
+
+            <!-- Barra de búsqueda -->
+            <div class="relative mb-6">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <input
+                    type="text"
+                    placeholder="Buscar ejercicios..."
+                    class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                />
+                <button class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Filtros -->
+            <div class="bg-white p-4 rounded-lg shadow-md mb-6 animate-slideDown">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Filtro por grupo muscular -->
+                    <div>
+                        <h3 class="font-medium text-gray-700 mb-2">Grupos Musculares</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800 border-blue-300 border">
+                                Pecho
+                            </button>
+                            <button class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-800 border-gray-300 border">
+                                Espalda
+                            </button>
+                            <button class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-800 border-gray-300 border">
+                                Piernas
+                            </button>
+                            <button class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-800 border-gray-300 border">
+                                Hombros
+                            </button>
+                            <button class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-800 border-gray-300 border">
+                                Brazos
+                            </button>
+                            <button class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-800 border-gray-300 border">
+                                Core
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filtro por categoría -->
+                    <div>
+                        <h3 class="font-medium text-gray-700 mb-2">Categoría</h3>
+                        <select class="block w-full p-2 border border-gray-300 rounded-md">
+                            <option value="">Todas las categorías</option>
+                            <option value="Compuesto">Compuesto</option>
+                            <option value="Aislamiento">Aislamiento</option>
+                            <option value="Funcional">Funcional</option>
+                            <option value="Cardio">Cardio</option>
+                        </select>
+                    </div>
+
+                    <!-- Filtro por equipo -->
+                    <div>
+                        <h3 class="font-medium text-gray-700 mb-2">Equipo</h3>
+                        <select class="block w-full p-2 border border-gray-300 rounded-md">
+                            <option value="">Todo el equipo</option>
+                            <option value="Mancuernas">Mancuernas</option>
+                            <option value="Barra">Barra</option>
+                            <option value="Máquina">Máquina</option>
+                            <option value="Peso corporal">Peso corporal</option>
+                            <option value="Bandas">Bandas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex justify-end">
+                    <button class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+                        Restablecer Filtros
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lista de ejercicios -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Ejercicio 1 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-5">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Press de Banca</h3>
+                        <p class="text-sm text-gray-600 mb-2 line-clamp-2">Ejercicio compuesto que trabaja principalmente el pecho, hombros y tríceps.</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="font-medium mr-2">Categoría:</span>
+                                <span>Compuesto</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="font-medium mr-2">Equipo:</span>
+                                <span>Barra</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Pecho</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Hombros</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Tríceps</span>
+                        </div>
+                        <button class="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Ver detalles
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ejercicio 2 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-5">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Sentadilla</h3>
+                        <p class="text-sm text-gray-600 mb-2 line-clamp-2">Ejercicio compuesto que trabaja principalmente las piernas y glúteos.</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="font-medium mr-2">Categoría:</span>
+                                <span>Compuesto</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="font-medium mr-2">Equipo:</span>
+                                <span>Barra</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Piernas</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Glúteos</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Core</span>
+                        </div>
+                        <button class="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Ver detalles
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ejercicio 3 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-5">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Dominadas</h3>
+                        <p class="text-sm text-gray-600 mb-2 line-clamp-2">Ejercicio compuesto que trabaja principalmente la espalda y bíceps.</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="font-medium mr-2">Categoría:</span>
+                                <span>Compuesto</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="font-medium mr-2">Equipo:</span>
+                                <span>Peso corporal</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Espalda</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Bíceps</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Antebrazos</span>
+                        </div>
+                        <button class="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Ver detalles
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ejercicio 4 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-5">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Peso Muerto</h3>
+                        <p class="text-sm text-gray-600 mb-2 line-clamp-2">Ejercicio compuesto que trabaja principalmente la espalda baja, glúteos y piernas.</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="font-medium mr-2">Categoría:</span>
+                                <span>Compuesto</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="font-medium mr-2">Equipo:</span>
+                                <span>Barra</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Espalda</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Piernas</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Glúteos</span>
+                        </div>
+                        <button class="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Ver detalles
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ejercicio 5 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-5">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Curl de Bíceps</h3>
+                        <p class="text-sm text-gray-600 mb-2 line-clamp-2">Ejercicio de aislamiento que trabaja principalmente los bíceps.</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="font-medium mr-2">Categoría:</span>
+                                <span>Aislamiento</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="font-medium mr-2">Equipo:</span>
+                                <span>Mancuernas</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Bíceps</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Antebrazos</span>
+                        </div>
+                        <button class="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Ver detalles
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ejercicio 6 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-5">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Extensión de Tríceps</h3>
+                        <p class="text-sm text-gray-600 mb-2 line-clamp-2">Ejercicio de aislamiento que trabaja principalmente los tríceps.</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="font-medium mr-2">Categoría:</span>
+                                <span>Aislamiento</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <span class="font-medium mr-2">Equipo:</span>
+                                <span>Mancuernas</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Tríceps</span>
+                        </div>
+                        <button class="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Ver detalles
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de detalles del ejercicio -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">Press de Banca</h2>
+                    <button class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="font-medium text-gray-700 mb-2">Descripción</h3>
+                        <p class="text-gray-600">Ejercicio compuesto que trabaja principalmente el pecho, hombros y tríceps. Es uno de los ejercicios más populares para desarrollar la fuerza en la parte superior del cuerpo.</p>
+
+                        <div class="mt-4 space-y-2">
+                            <div>
+                                <span class="font-medium text-gray-700">Categoría: </span>
+                                <span class="text-gray-600">Compuesto</span>
+                            </div>
+                            <div>
+                                <span class="font-medium text-gray-700">Equipo: </span>
+                                <span class="text-gray-600">Barra</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-medium text-gray-700 mb-2">Cómo realizar</h3>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-600">
+                            <li>Acuéstate en un banco plano con los pies apoyados en el suelo.</li>
+                            <li>Agarra la barra con las manos un poco más separadas que el ancho de los hombros.</li>
+                            <li>Baja la barra lentamente hasta que toque ligeramente tu pecho.</li>
+                            <li>Empuja la barra hacia arriba hasta extender completamente los brazos.</li>
+                            <li>Repite el movimiento manteniendo el control en todo momento.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="font-medium text-gray-700 mb-2">Músculos trabajados</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full">Pecho</span>
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full">Hombros</span>
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full">Tríceps</span>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="font-medium text-gray-700 mb-2">Consejos</h3>
+                    <ul class="list-disc list-inside space-y-1 text-gray-600">
+                        <li>Mantén los hombros hacia atrás y abajo durante todo el movimiento.</li>
+                        <li>No arquees excesivamente la espalda.</li>
+                        <li>Respira correctamente: inhala al bajar la barra y exhala al subirla.</li>
+                        <li>Utiliza un peso adecuado para mantener una buena técnica.</li>
+                    </ul>
+                </div>
+
+                <div class="flex justify-end">
+                    <button class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Volver a la biblioteca
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ocultar el modal al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.querySelector('.fixed.inset-0');
+            modal.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

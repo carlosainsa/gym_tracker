@@ -1,0 +1,149 @@
+{
+  "app": {
+    "name": "Gym Tracker",
+    "version": "1.0.0",
+    "copyright": "© 2023 Gym Tracker. All rights reserved."
+  },
+  "navigation": {
+    "home": "Home",
+    "progress": "Progress",
+    "plan": "Plan",
+    "create": "Create",
+    "library": "Library",
+    "settings": "Settings",
+    "back": "Back"
+  },
+  "home": {
+    "today": "Today's Workout",
+    "available": "Available Workouts",
+    "phase": "Phase {{number}} of your training plan",
+    "rest_day": "Rest Day",
+    "recovery": "Active recovery • Light activities recommended",
+    "recent_activity": "Recent Activity",
+    "workout_change": "Workout Change",
+    "from": "From",
+    "to": "To",
+    "series": "sets",
+    "change": "Change"
+  },
+  "workout": {
+    "start": "Start workout",
+    "main_exercises": "Main exercises",
+    "exercises": "exercises",
+    "flexible": "Flexible",
+    "recommended_day": "Recommended"
+  },
+  "progress": {
+    "title": "Your Progress",
+    "no_data": "No data yet",
+    "no_data_desc": "Start logging your workouts to see your progress here. Statistics and charts will appear automatically.",
+    "exercises_tab": "Exercises",
+    "charts_tab": "Charts",
+    "exercises_by_day": "Exercises by day",
+    "workouts": "Workouts",
+    "total_workouts": "Total recorded sessions",
+    "exercises_count": "Exercises",
+    "exercises_with_logs": "Exercises with logs",
+    "total_weight": "Total weight",
+    "weight_lifted": "Total weight lifted",
+    "records": "records",
+    "view_details": "View details",
+    "back_to_all": "Back to all exercises",
+    "select_exercise": "Select an exercise to see detailed progress charts.",
+    "strongest_exercise": "Strongest exercise",
+    "weakest_exercise": "Weakest exercise",
+    "most_frequent": "Most frequent exercise",
+    "best_performance": "Best average performance",
+    "worst_performance": "Lowest average performance",
+    "most_sessions": "Highest number of sessions",
+    "select_time_range": "Time range",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
+    "max_weight_chart": "Max Weight Progression",
+    "volume_chart": "Total Volume per Session",
+    "performance_chart": "Performance per Session",
+    "no_chart_data": "Not enough data to display the chart."
+  },
+  "settings": {
+    "title": "Settings",
+    "data": {
+      "title": "Data and Backups",
+      "description": "Export your data to create a backup or transfer it to another device. You can also import previously exported data.",
+      "export": "Export",
+      "import": "Import",
+      "export_desc": "Export all your training data, logs, and settings to create a backup or transfer them to another device.",
+      "import_desc": "Import your training data, logs, and settings from a backup file.",
+      "select_file": "Select a backup file",
+      "download": "Download backup",
+      "export_success": "Data exported successfully.",
+      "import_success": "Data imported successfully. Reloading...",
+      "import_error": "Error processing the file. Make sure it's a valid JSON file."
+    },
+    "sync": {
+      "title": "Cloud Sync",
+      "description": "Sync your data with the cloud to access it from any device."
+    },
+    "theme": {
+      "title": "App Theme",
+      "dark_mode": "Dark mode",
+      "description": "Dark theme reduces eye strain in low-light environments and saves battery on OLED screen devices."
+    },
+    "phase": {
+      "title": "Training Phase",
+      "description": "Change the current phase of your training plan. This will affect the routines shown in the plan.",
+      "current": "Current phase",
+      "save": "Save",
+      "success": "Phase changed successfully."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Configure notifications to remind you of your workouts.",
+      "configure": "Configure Notifications"
+    },
+    "about": {
+      "title": "About the app",
+      "description": "An app for tracking workouts and progress in the gym."
+    },
+    "language": {
+      "title": "Language",
+      "description": "Change the language of the app.",
+      "spanish": "Español",
+      "english": "English"
+    }
+  },
+  "sync": {
+    "cloud_sync": "Cloud Sync",
+    "description": "Sync your data with the cloud to access it from any device.",
+    "last_sync": "Last sync",
+    "newer_data_available": "Newer data available in the cloud.",
+    "sync_success": "Data synced successfully.",
+    "sync_error": "Error syncing data. Please try again.",
+    "sync_now": "Sync now",
+    "syncing": "Syncing...",
+    "download": "Download from cloud"
+  },
+  "auth": {
+    "login": "Log in",
+    "logout": "Log out",
+    "logging_in": "Logging in...",
+    "logging_out": "Logging out...",
+    "create_account": "Create account",
+    "creating_account": "Creating account...",
+    "login_to_account": "Log in to your account",
+    "or": "Or",
+    "or_continue_with": "Or continue with",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm password",
+    "name": "Name",
+    "forgot_password": "Forgot your password?",
+    "reset_password": "Reset password",
+    "reset_instructions": "Enter your email and we'll send you a link to reset your password.",
+    "send_reset_link": "Send reset link",
+    "sending": "Sending...",
+    "reset_email_sent": "An email with instructions to reset your password has been sent.",
+    "back_to_login": "Back to login",
+    "passwords_dont_match": "Passwords don't match."
+  }
+}

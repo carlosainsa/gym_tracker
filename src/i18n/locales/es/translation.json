@@ -1,0 +1,149 @@
+{
+  "app": {
+    "name": "Gym Tracker",
+    "version": "1.0.0",
+    "copyright": "© 2023 Gym Tracker. Todos los derechos reservados."
+  },
+  "navigation": {
+    "home": "Inicio",
+    "progress": "Progreso",
+    "plan": "Plan",
+    "create": "Crear",
+    "library": "Biblioteca",
+    "settings": "Configuración",
+    "back": "Volver"
+  },
+  "home": {
+    "today": "Entrenamiento de hoy",
+    "available": "Entrenamientos Disponibles",
+    "phase": "Fase {{number}} de tu plan de entrenamiento",
+    "rest_day": "Día de Descanso",
+    "recovery": "Recuperación activa • Actividades suaves recomendadas",
+    "recent_activity": "Actividad Reciente",
+    "workout_change": "Cambio de Entrenamiento",
+    "from": "De",
+    "to": "A",
+    "series": "series",
+    "change": "Cambio"
+  },
+  "workout": {
+    "start": "Iniciar entrenamiento",
+    "main_exercises": "Ejercicios principales",
+    "exercises": "ejercicios",
+    "flexible": "Flexible",
+    "recommended_day": "Recomendado"
+  },
+  "progress": {
+    "title": "Tu Progreso",
+    "no_data": "No hay datos todavía",
+    "no_data_desc": "Comienza a registrar tus entrenamientos para ver tu progreso aquí. Las estadísticas y gráficas aparecerán automáticamente.",
+    "exercises_tab": "Ejercicios",
+    "charts_tab": "Gráficos",
+    "exercises_by_day": "Ejercicios por día",
+    "workouts": "Entrenamientos",
+    "total_workouts": "Total de sesiones registradas",
+    "exercises_count": "Ejercicios",
+    "exercises_with_logs": "Ejercicios con registros",
+    "total_weight": "Peso total",
+    "weight_lifted": "Peso total levantado",
+    "records": "registros",
+    "view_details": "Ver detalles",
+    "back_to_all": "Volver a todos los ejercicios",
+    "select_exercise": "Selecciona un ejercicio para ver gráficos detallados de tu progreso.",
+    "strongest_exercise": "Ejercicio más fuerte",
+    "weakest_exercise": "Ejercicio más débil",
+    "most_frequent": "Ejercicio más frecuente",
+    "best_performance": "Mejor rendimiento promedio",
+    "worst_performance": "Menor rendimiento promedio",
+    "most_sessions": "Mayor número de sesiones",
+    "select_time_range": "Rango de tiempo",
+    "week": "Semana",
+    "month": "Mes",
+    "year": "Año",
+    "max_weight_chart": "Progresión de Peso Máximo",
+    "volume_chart": "Volumen Total por Sesión",
+    "performance_chart": "Rendimiento por Sesión",
+    "no_chart_data": "No hay datos suficientes para mostrar el gráfico."
+  },
+  "settings": {
+    "title": "Configuración",
+    "data": {
+      "title": "Datos y Copias de Seguridad",
+      "description": "Exporta tus datos para hacer una copia de seguridad o transferirlos a otro dispositivo. También puedes importar datos previamente exportados.",
+      "export": "Exportar",
+      "import": "Importar",
+      "export_desc": "Exporta todos tus datos de entrenamiento, registros y configuraciones para hacer una copia de seguridad o transferirlos a otro dispositivo.",
+      "import_desc": "Importa tus datos de entrenamiento, registros y configuraciones desde un archivo de copia de seguridad.",
+      "select_file": "Selecciona un archivo de copia de seguridad",
+      "download": "Descargar copia de seguridad",
+      "export_success": "Datos exportados correctamente.",
+      "import_success": "Datos importados correctamente. Recargando...",
+      "import_error": "Error al procesar el archivo. Asegúrate de que es un archivo JSON válido."
+    },
+    "sync": {
+      "title": "Sincronización en la nube",
+      "description": "Sincroniza tus datos con la nube para acceder a ellos desde cualquier dispositivo."
+    },
+    "theme": {
+      "title": "Tema de la aplicación",
+      "dark_mode": "Tema oscuro",
+      "description": "El tema oscuro reduce la fatiga visual en entornos con poca luz y ahorra batería en dispositivos con pantalla OLED."
+    },
+    "phase": {
+      "title": "Fase de Entrenamiento",
+      "description": "Cambia la fase actual de tu plan de entrenamiento. Esto afectará a las rutinas que se muestran en el plan.",
+      "current": "Fase actual",
+      "save": "Guardar",
+      "success": "Fase cambiada correctamente."
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "description": "Configura las notificaciones para recordarte tus entrenamientos.",
+      "configure": "Configurar Notificaciones"
+    },
+    "about": {
+      "title": "Acerca de la aplicación",
+      "description": "Una aplicación para seguimiento de entrenamientos y progreso en el gimnasio."
+    },
+    "language": {
+      "title": "Idioma",
+      "description": "Cambia el idioma de la aplicación.",
+      "spanish": "Español",
+      "english": "English"
+    }
+  },
+  "sync": {
+    "cloud_sync": "Sincronización en la nube",
+    "description": "Sincroniza tus datos con la nube para acceder a ellos desde cualquier dispositivo.",
+    "last_sync": "Última sincronización",
+    "newer_data_available": "Hay datos más recientes disponibles en la nube.",
+    "sync_success": "Datos sincronizados correctamente.",
+    "sync_error": "Error al sincronizar datos. Inténtalo de nuevo.",
+    "sync_now": "Sincronizar ahora",
+    "syncing": "Sincronizando...",
+    "download": "Descargar de la nube"
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "logging_in": "Iniciando sesión...",
+    "logging_out": "Cerrando sesión...",
+    "create_account": "Crear cuenta",
+    "creating_account": "Creando cuenta...",
+    "login_to_account": "Iniciar sesión en tu cuenta",
+    "or": "O",
+    "or_continue_with": "O continuar con",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirm_password": "Confirmar contraseña",
+    "name": "Nombre",
+    "forgot_password": "¿Olvidaste tu contraseña?",
+    "reset_password": "Restablecer contraseña",
+    "reset_instructions": "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+    "send_reset_link": "Enviar enlace de restablecimiento",
+    "sending": "Enviando...",
+    "reset_email_sent": "Se ha enviado un correo electrónico con instrucciones para restablecer tu contraseña.",
+    "back_to_login": "Volver a iniciar sesión",
+    "passwords_dont_match": "Las contraseñas no coinciden."
+  }
+}

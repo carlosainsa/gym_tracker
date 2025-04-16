@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { workoutPlan, emptyWorkoutLog } from '../data/workoutPlan';
 import exerciseLibrary from '../data/exerciseLibrary';
+import { TRAINING_CONFIG } from '../config/trainingConfig';
 
 // Crear el contexto
 const WorkoutContext = createContext();
@@ -10,8 +11,21 @@ export const useWorkout = () => {
   return useContext(WorkoutContext);
 };
 
+// Versión del plan para control de cambios
+const PLAN_VERSION = '2.0';
+
 // Proveedor del contexto
 export const WorkoutProvider = ({ children }) => {
+  // Verificar versión del plan y limpiar si es necesario
+  useEffect(() => {
+    const savedVersion = localStorage.getItem('planVersion');
+    if (savedVersion !== PLAN_VERSION) {
+      localStorage.removeItem('workoutPlan');
+      localStorage.removeItem('workoutLogs');
+      localStorage.setItem('planVersion', PLAN_VERSION);
+    }
+  }, []);
+
   // Estado para el plan de entrenamiento
   const [plan, setPlan] = useState(() => {
     const savedPlan = localStorage.getItem('workoutPlan');
@@ -23,6 +37,9 @@ export const WorkoutProvider = ({ children }) => {
     const savedPhase = localStorage.getItem('currentPhase');
     return savedPhase ? parseInt(savedPhase) : 1;
   });
+
+  // Estado para el día expandido
+  const [expandedDay, setExpandedDay] = useState(null);
 
   // Estado para los registros de entrenamiento
   const [workoutLogs, setWorkoutLogs] = useState(() => {
@@ -168,6 +185,18 @@ export const WorkoutProvider = ({ children }) => {
     }
   };
 
+  // Función para importar datos
+  const importData = (data) => {
+    if (data.plan) setPlan(data.plan);
+    if (data.workoutLogs) setWorkoutLogs(data.workoutLogs);
+    if (data.currentPhase) setCurrentPhase(data.currentPhase);
+
+    // Guardar en localStorage
+    localStorage.setItem('workoutPlan', JSON.stringify(data.plan));
+    localStorage.setItem('workoutLogs', JSON.stringify(data.workoutLogs));
+    if (data.currentPhase) localStorage.setItem('currentPhase', data.currentPhase);
+  };
+
   // Valores que se proporcionarán a través del contexto
   const value = {
     plan,
@@ -184,7 +213,10 @@ export const WorkoutProvider = ({ children }) => {
     saveRoutine,
     deleteRoutine,
     addDayToPlan,
-    updateExerciseProgress
+    updateExerciseProgress,
+    expandedDay,
+    setExpandedDay,
+    importData
   };
 
   return (

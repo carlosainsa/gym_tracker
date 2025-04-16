@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Crear pestaña
             const tab = document.createElement('button');
             tab.className = `px-4 py-2 font-medium text-sm transition-all ${i === currentDay ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-500 hover:text-gray-700'}`;
-            tab.textContent = `Día ${i}`;
+            tab.textContent = `Entrenamiento ${i}`;
             tab.dataset.day = i;
             tab.addEventListener('click', () => switchDay(i));
             daysTabsContainer.appendChild(tab);
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
             content.dataset.day = i;
             content.innerHTML = `
                 <div class="mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Día ${i}</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Entrenamiento ${i}</h3>
                     <div id="day-${i}-exercises" class="space-y-3">
                         <div class="text-center py-6 border-2 border-dashed border-gray-300 rounded-lg">
                             <p class="text-gray-500">Añade ejercicios desde la biblioteca</p>

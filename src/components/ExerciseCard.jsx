@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useWorkout } from '../context/WorkoutContext';
-import { FaPlus, FaCheck, FaDumbbell, FaStopwatch, FaWeight, FaArrowRight, FaInfoCircle } from 'react-icons/fa';
+import { FaPlus, FaCheck, FaDumbbell, FaStopwatch, FaWeight, FaInfoCircle } from 'react-icons/fa';
+import { evaluateExerciseProgress, getProgressMessage, getExactColorByPercentage } from '../utils/progressEvaluation';
+import RestTimer from './RestTimer';
 
 const ExerciseCard = ({ exercise, dayId, showDetails = false }) => {
   const { updateExerciseProgress, getExerciseLogs } = useWorkout();
@@ -10,6 +12,9 @@ const ExerciseCard = ({ exercise, dayId, showDetails = false }) => {
     sets: [],
     notes: ''
   });
+  const [evaluation, setEvaluation] = useState(null);
+  const [currentSetIndex, setCurrentSetIndex] = useState(0);
+  const [showRestTimer, setShowRestTimer] = useState(false);
 
   // Verificar si el ejercicio ya tiene valores registrados
   const hasActualValues = exercise.actualSets && exercise.actualSets.length > 0;
@@ -19,10 +24,16 @@ const ExerciseCard = ({ exercise, dayId, showDetails = false }) => {
 
   // Determinar el color del indicador de progreso
   const getProgressColor = () => {
-    if (progress >= 100) return 'bg-green-500';
-    if (progress >= 80) return 'bg-yellow-500';
-    if (progress > 0) return 'bg-red-500';
-    return 'bg-gray-300';
+    // Usar la función getExactColorByPercentage para obtener un color más preciso
+    const color = getExactColorByPercentage(progress);
+
+    // Convertir el color hexadecimal a una clase de Tailwind
+    switch (color) {
+      case '#4caf50': return 'bg-green-500'; // Verde (100% o más): Has alcanzado o superado el objetivo
+      case '#ffc107': return 'bg-yellow-500'; // Amarillo (80-99%): Estás acercándote al objetivo
+      case '#f44336': return 'bg-red-500';   // Rojo (menos de 80%): Estás muy lejos del objetivo
+      default: return 'bg-gray-300';         // sin progreso
+    }
   };
 
   // Obtener los registros históricos del ejercicio
@@ -31,12 +42,19 @@ const ExerciseCard = ({ exercise, dayId, showDetails = false }) => {
   // Inicializar los sets cuando se abre el formulario de registro
   const handleStartLogging = () => {
     // Crear sets iniciales basados en los sets planificados
-    const initialSets = exercise.sets.map(set => ({
+    const initialSets = Array.isArray(exercise.sets)
+      ? exercise.sets.map(set => ({
+          reps: '',
+          weight: ''
+        }))
+      : Array(exercise.sets || 3).fill().map(() => ({
       reps: '',
       weight: ''
     }));
 
     setLogData({ sets: initialSets, notes: '' });
+    setCurrentSetIndex(0);
+    setShowRestTimer(false);
     setIsLogging(true);
   };
 
@@ -45,6 +63,74 @@ const ExerciseCard = ({ exercise, dayId, showDetails = false }) => {
     const newSets = [...logData.sets];
     newSets[index] = { ...newSets[index], [field]: value };
     setLogData({ ...logData, sets: newSets });
+
+    // Evaluar el progreso cuando se actualizan los datos
+    evaluateSet(newSets);
+  };
+
+  // Función para manejar la finalización de una serie y mostrar el temporizador
+  const handleSetComplete = (index) => {
+    // Solo mostrar el temporizador si no es la última serie
+    if (index < logData.sets.length - 1) {
+      setCurrentSetIndex(index);
+      setShowRestTimer(true);
+      console.log('Mostrando temporizador para la serie:', index);
+    } else {
+      // Si es la última serie, simplemente avanzamos
+      setCurrentSetIndex(index + 1);
+      console.log('Última serie completada');
+    }
+  };
+
+  // Función para manejar la finalización del temporizador de descanso
+  const handleRestComplete = () => {
+    // Esperar un momento para que el usuario vea el mensaje "¡Listos para la próxima serie!"
+    setTimeout(() => {
+      setShowRestTimer(false);
+      setCurrentSetIndex(currentSetIndex + 1);
+    }, 2000);
+  };
+
+  // Evaluar el progreso de un set
+  const evaluateSet = (sets) => {
+    if (!sets || sets.length === 0) return;
+
+    // Preparar los datos para la evaluación
+    const exerciseData = {
+      reps: sets[0].reps, // Tomamos el primer set como referencia
+      weight: sets[0].weight
+    };
+
+    // Obtener los rangos planificados del texto mostrado
+    const planText = exercise.planificado || ''; // "12-15 x 32-35 kgkg"
+    const matches = planText.match(/(\d+)-(\d+)\s*x\s*(\d+)-(\d+)/);
+
+    if (!matches) {
+      console.error('No se pudo extraer el rango planificado:', planText);
+      return;
+    }
+
+    // Extraer los valores mínimos de los rangos
+    const [_, minReps, maxReps, minWeight, maxWeight] = matches;
+
+    // Preparar los rangos planificados usando los valores mínimos
+    const plannedData = {
+      reps: `${minReps}-${maxReps}`,
+      weight: `${minWeight}-${maxWeight}`
+    };
+
+    console.log('Evaluando con:', {
+      exerciseData,
+      plannedData,
+      minReps,
+      maxReps,
+      minWeight,
+      maxWeight
+    });
+
+    // Realizar la evaluación
+    const result = evaluateExerciseProgress(exerciseData, plannedData);
+    setEvaluation(result);
   };
 
   // Guardar el registro de entrenamiento
@@ -65,8 +151,12 @@ const ExerciseCard = ({ exercise, dayId, showDetails = false }) => {
     // Actualizar el progreso del ejercicio
     updateExerciseProgress(exercise.id, processedSets);
 
+    // Reiniciar estados
     setIsLogging(false);
     setIsExpanded(false);
+    setEvaluation(null);
+    setShowRestTimer(false);
+    setCurrentSetIndex(0);
   };
 
   return (
@@ -85,14 +175,20 @@ const ExerciseCard = ({ exercise, dayId, showDetails = false }) => {
             <div className="flex items-center text-sm text-gray-600">
               <FaDumbbell className="mr-2 text-primary-500" />
               <span>
-                {exercise.sets.length} series x {exercise.sets[0]?.reps || '?'} reps
+                {Array.isArray(exercise.sets)
+                  ? `${exercise.sets.length} series x ${exercise.sets[0]?.reps || '?'} reps`
+                  : typeof exercise.sets === 'number'
+                    ? `${exercise.sets} series x ${exercise.reps || '?'} reps`
+                    : 'Series no disponibles'
+                }
               </span>
             </div>
 
-            {exercise.sets[0]?.weight && (
+            {((Array.isArray(exercise.sets) && exercise.sets[0]?.weight) ||
+              (typeof exercise.sets === 'number' && exercise.weight)) && (
               <div className="flex items-center text-sm text-gray-600">
                 <FaWeight className="mr-2 text-primary-500" />
-                <span>Peso: {exercise.sets[0].weight} kg</span>
+                <span>Peso: {Array.isArray(exercise.sets) ? exercise.sets[0].weight : exercise.weight} kg</span>
               </div>
             )}
 
@@ -129,29 +225,119 @@ const ExerciseCard = ({ exercise, dayId, showDetails = false }) => {
         ) : null}
       </div>
 
-      {/* Detalles expandidos */}
-      {isExpanded && !isLogging && (
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          {/* Valores planificados */}
-          <div className="mb-4">
-            <h4 className="text-sm font-semibold text-gray-700 mb-2">Valores planificados:</h4>
-            <div className="bg-gray-50 rounded-lg p-3">
-              <div className="grid grid-cols-3 gap-2 text-sm">
-                <div className="font-medium text-gray-500">Serie</div>
-                <div className="font-medium text-gray-500">Reps</div>
-                <div className="font-medium text-gray-500">Peso (kg)</div>
-
-                {exercise.sets.map((set, index) => (
-                  <React.Fragment key={`planned-${index}`}>
-                    <div className="text-gray-800">{index + 1}</div>
-                    <div className="text-gray-800">{set.reps}</div>
-                    <div className="text-gray-800">{set.weight || '-'}</div>
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
+      {/* Formulario de registro */}
+      {isLogging && (
+        <div className="mt-5 border-t border-gray-100 pt-5">
+          <div className="flex items-center mb-4">
+            <FaInfoCircle className="text-primary-500 mr-2" />
+            <p className="text-sm text-gray-600">
+              Registra los valores reales que has realizado en cada serie.
+            </p>
           </div>
 
+          <div className="space-y-3">
+            {logData.sets.map((set, index) => (
+              <React.Fragment key={index}>
+                <div className="flex gap-3 items-center">
+                  <div className="w-10 h-10 flex items-center justify-center bg-primary-100 text-primary-800 font-bold rounded-lg">
+                    {index + 1}
+                  </div>
+                  <div className="flex-1 grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs text-gray-500 mb-1 block">Repeticiones</label>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        placeholder={
+                          Array.isArray(exercise.sets)
+                            ? exercise.sets[index]?.reps
+                            : exercise.reps || 'Reps'
+                        }
+                        value={set.reps}
+                        onChange={(e) => handleSetChange(index, 'reps', e.target.value)}
+                        className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all"
+                        disabled={showRestTimer && index > currentSetIndex}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs text-gray-500 mb-1 block">Peso (kg)</label>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        placeholder={
+                          Array.isArray(exercise.sets)
+                            ? exercise.sets[index]?.weight
+                            : exercise.weight || 'Peso'
+                        }
+                        value={set.weight}
+                        onChange={(e) => handleSetChange(index, 'weight', e.target.value)}
+                        className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all"
+                        disabled={showRestTimer && index > currentSetIndex}
+                      />
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleSetComplete(index)}
+                    className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition-all"
+                    disabled={showRestTimer || (index !== currentSetIndex) || (!set.reps && !set.weight)}
+                  >
+                    <FaCheck size={16} />
+                  </button>
+                </div>
+
+                {/* Temporizador de descanso después de cada serie (excepto la última) */}
+                {showRestTimer && index === currentSetIndex && (
+                  <div className="mt-3 border-t border-blue-200 pt-3">
+                    <RestTimer
+                      duration={exercise.rest ? parseInt(exercise.rest.replace(/[^0-9]/g, '')) : 60}
+                      onComplete={handleRestComplete}
+                      isActive={true}
+                    />
+                  </div>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+
+          {/* Evaluación en tiempo real */}
+          {evaluation && (
+            <div className="mt-4 space-y-3">
+              <div className="p-3 rounded-lg" style={{ backgroundColor: getExactColorByPercentage(evaluation.reps.percentage) }}>
+                <p className="text-white text-sm">
+                  Repeticiones: {getProgressMessage(evaluation.reps)}
+                </p>
+              </div>
+              <div className="p-3 rounded-lg" style={{ backgroundColor: getExactColorByPercentage(evaluation.weight.percentage) }}>
+                <p className="text-white text-sm">
+                  Peso: {getProgressMessage(evaluation.weight)}
+                </p>
+              </div>
+            </div>
+          )}
+
+          <div className="mt-4 flex justify-end gap-2">
+            <button
+              onClick={() => {
+                setIsLogging(false);
+                setEvaluation(null);
+              }}
+              className="px-4 py-2 text-gray-600 hover:text-gray-800"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={handleSaveLog}
+              className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-all flex items-center"
+            >
+              <FaCheck className="mr-2" />
+              Guardar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {isExpanded && (
+        <div className="mt-5 border-t border-gray-100 pt-5">
           {/* Valores reales (si existen) */}
           {hasActualValues && (
             <div className="mb-4">
@@ -187,115 +373,20 @@ const ExerciseCard = ({ exercise, dayId, showDetails = false }) => {
                         {log.sets?.length || 0} series
                       </span>
                     </div>
-
-                    {log.sets && log.sets.length > 0 && (
-                      <div className="grid grid-cols-3 gap-2 mt-2">
-                        <div className="font-medium text-gray-500">Serie</div>
-                        <div className="font-medium text-gray-500">Reps</div>
-                        <div className="font-medium text-gray-500">Peso</div>
-
+                    <div className="grid grid-cols-3 gap-2">
                         {log.sets.map((set, setIndex) => (
-                          <React.Fragment key={`log-${index}-set-${setIndex}`}>
-                            <div className="text-gray-800">{setIndex + 1}</div>
-                            <div className="text-gray-800">{set.reps || '-'}</div>
-                            <div className="text-gray-800">{set.weight || '-'}</div>
+                        <React.Fragment key={`set-${setIndex}`}>
+                          <div className="text-gray-600">Serie {setIndex + 1}</div>
+                          <div>{set.reps || '-'} reps</div>
+                          <div>{set.weight || '-'} kg</div>
                           </React.Fragment>
                         ))}
                       </div>
-                    )}
                   </div>
                 ))}
-
-                {exerciseLogs.length > 3 && (
-                  <div className="text-center">
-                    <button className="text-primary-600 text-sm font-medium flex items-center justify-center mx-auto">
-                      Ver más <FaArrowRight className="ml-1" size={12} />
-                    </button>
-                  </div>
-                )}
               </div>
             </div>
           )}
-
-          {/* Descripción del ejercicio */}
-          {exercise.description && (
-            <div className="mt-4">
-              <h4 className="text-sm font-semibold text-gray-700 mb-2">Descripción:</h4>
-              <p className="text-sm text-gray-600">{exercise.description}</p>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Formulario de registro */}
-      {isLogging && (
-        <div className="mt-5 border-t border-gray-100 pt-5">
-          <div className="flex items-center mb-4">
-            <FaInfoCircle className="text-primary-500 mr-2" />
-            <p className="text-sm text-gray-600">
-              Registra los valores reales que has realizado en cada serie.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            {logData.sets.map((set, index) => (
-              <div key={index} className="flex gap-3 items-center">
-                <div className="w-10 h-10 flex items-center justify-center bg-primary-100 text-primary-800 font-bold rounded-lg">
-                  {index + 1}
-                </div>
-                <div className="flex-1 grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Repeticiones</label>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      placeholder={exercise.sets[index]?.reps || 'Reps'}
-                      value={set.reps}
-                      onChange={(e) => handleSetChange(index, 'reps', e.target.value)}
-                      className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Peso (kg)</label>
-                    <input
-                      type="text"
-                      inputMode="decimal"
-                      placeholder={exercise.sets[index]?.weight || 'Peso'}
-                      value={set.weight}
-                      onChange={(e) => handleSetChange(index, 'weight', e.target.value)}
-                      className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all"
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-4 mb-4">
-            <label className="text-xs text-gray-500 mb-1 block">Notas (opcional)</label>
-            <textarea
-              placeholder="Ej: Aumentar peso en la próxima sesión"
-              value={logData.notes}
-              onChange={(e) => setLogData({ ...logData, notes: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all"
-              rows="2"
-            ></textarea>
-          </div>
-
-          <div className="flex justify-end gap-3">
-            <button
-              onClick={() => setIsLogging(false)}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
-            >
-              Cancelar
-            </button>
-            <button
-              onClick={handleSaveLog}
-              className="px-4 py-2 bg-primary-600 text-white rounded-lg font-medium shadow-md hover:bg-primary-700 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50"
-            >
-              Guardar
-            </button>
-          </div>
         </div>
       )}
     </div>

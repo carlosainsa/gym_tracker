@@ -132,13 +132,13 @@
         </div>
 
         <!-- Días de entrenamiento -->
-        <h2 class="text-xl font-bold text-gray-800 mb-3">Días de entrenamiento</h2>
+        <h2 class="text-xl font-bold text-gray-800 mb-3">Entrenamientos</h2>
         
-        <!-- Día 1 -->
+        <!-- Entrenamiento 1 -->
         <div class="bg-white rounded-xl shadow-card mb-4 overflow-hidden border border-gray-100">
             <button class="w-full p-4 text-left flex justify-between items-center">
                 <div>
-                    <h3 class="font-semibold text-gray-800">Día 1: Piernas + Core</h3>
+                    <h3 class="font-semibold text-gray-800">Entrenamiento 1: Cuerpo Completo - Énfasis en Empuje</h3>
                     <p class="text-sm text-gray-600">Recomendado: Lunes</p>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -147,11 +147,21 @@
             </button>
             
             <div class="p-4 border-t border-gray-100">
-                <h4 class="font-medium mb-2">Ejercicios (Fase 1):</h4>
+                <!-- Calentamiento -->
+                <div class="mb-4">
+                    <h4 class="font-medium mb-2">Calentamiento (10 min):</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700">
+                        <li>5 min bicicleta estática (bajo impacto)</li>
+                        <li>Movilidad articular progresiva (hombros, cadera, tobillos)</li>
+                    </ul>
+                </div>
+
+                <h4 class="font-medium mb-2">Bloque Principal (50-55 min):</h4>
                 
                 <div class="space-y-3">
                     <div class="border-b pb-3">
                         <h5 class="font-medium">Prensa de piernas</h5>
+                        <p class="text-xs text-gray-600 mt-1">Principal tren inferior</p>
                         <div class="grid grid-cols-3 text-sm mt-1">
                             <div>
                                 <span class="text-gray-600">Series:</span> 3
@@ -169,28 +179,46 @@
                     </div>
                     
                     <div class="border-b pb-3">
-                        <h5 class="font-medium">Sentadilla Goblet con mancuerna</h5>
+                        <h5 class="font-medium">Press de banca</h5>
+                        <p class="text-xs text-gray-600 mt-1">Principal empuje superior</p>
                         <div class="grid grid-cols-3 text-sm mt-1">
                             <div>
                                 <span class="text-gray-600">Series:</span> 3
                             </div>
                             <div>
-                                <span class="text-gray-600">Reps:</span> 10-12
+                                <span class="text-gray-600">Reps:</span> 12-15
                             </div>
                             <div>
-                                <span class="text-gray-600">Peso:</span> 12-15 kg
+                                <span class="text-gray-600">Peso:</span> 30-35 kg
                             </div>
                         </div>
                         <div class="text-sm mt-1">
                             <span class="text-gray-600">Descanso:</span> 75 seg
                         </div>
-                        <div class="text-sm mt-1">
-                            <span class="text-gray-600">Técnica:</span> Profundidad media, talones apoyados
-                        </div>
                     </div>
                     
                     <div class="border-b pb-3">
+                        <h5 class="font-medium">Jalón al pecho</h5>
+                        <p class="text-xs text-gray-600 mt-1">Tracción vertical</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 12-15
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 32-35 kg
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 75 seg
+                        </div>
+                    </div>
+
+                    <div class="border-b pb-3">
                         <h5 class="font-medium">Extensión de piernas</h5>
+                        <p class="text-xs text-gray-600 mt-1">Aislamiento cuádriceps</p>
                         <div class="grid grid-cols-3 text-sm mt-1">
                             <div>
                                 <span class="text-gray-600">Series:</span> 3
@@ -206,34 +234,417 @@
                             <span class="text-gray-600">Descanso:</span> 60 seg
                         </div>
                     </div>
+
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Elevaciones laterales</h5>
+                        <p class="text-xs text-gray-600 mt-1">Aislamiento hombros</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 12-15
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 7-8 kg/lado
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 60 seg
+                        </div>
+                    </div>
+
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Extensión de tríceps</h5>
+                        <p class="text-xs text-gray-600 mt-1">Aislamiento tríceps</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 12-15
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 20-22 kg
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 60 seg
+                        </div>
+                    </div>
+
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Plancha frontal</h5>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Tiempo:</span> 45-60 seg
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 45 seg
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Finalización -->
+                <div class="mt-4">
+                    <h4 class="font-medium mb-2">Finalización (10 min):</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700">
+                        <li>Estiramientos estáticos para pecho, hombros y cuádriceps</li>
+                        <li>Movilidad específica de cadera</li>
+                        <li>Automasaje plantar (para fasciitis)</li>
+                    </ul>
                 </div>
             </div>
         </div>
         
-        <!-- Día 2 -->
+        <!-- Entrenamiento 2 -->
         <div class="bg-white rounded-xl shadow-card mb-4 overflow-hidden border border-gray-100">
             <button class="w-full p-4 text-left flex justify-between items-center">
                 <div>
-                    <h3 class="font-semibold text-gray-800">Día 2: Pecho, Hombros y Tríceps</h3>
+                    <h3 class="font-semibold text-gray-800">Entrenamiento 2: Cuerpo Completo - Énfasis en Tracción</h3>
                     <p class="text-sm text-gray-600">Recomendado: Miércoles</p>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
             </button>
+
+            <div class="p-4 border-t border-gray-100">
+                <!-- Calentamiento -->
+                <div class="mb-4">
+                    <h4 class="font-medium mb-2">Calentamiento (10 min):</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700">
+                        <li>5 min bicicleta estática</li>
+                        <li>Activación de dorsales y glúteos</li>
+                    </ul>
+                </div>
+
+                <h4 class="font-medium mb-2">Bloque Principal (50-55 min):</h4>
+                
+                <div class="space-y-3">
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Sentadilla Goblet con mancuerna</h5>
+                        <p class="text-xs text-gray-600 mt-1">Principal tren inferior</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 10-12
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 12-15 kg
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 75 seg
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Técnica:</span> Talones apoyados, no descender completamente
+                        </div>
+                    </div>
+                    
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Remo en máquina</h5>
+                        <p class="text-xs text-gray-600 mt-1">Principal tracción</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 12-15
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 36-40 kg
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 75 seg
+                        </div>
+                    </div>
+                    
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Press de hombros con mancuernas</h5>
+                        <p class="text-xs text-gray-600 mt-1">Empuje vertical</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 12-15
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 15-17 kg/lado
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 75 seg
+                        </div>
+                    </div>
+
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Curl femoral tumbado</h5>
+                        <p class="text-xs text-gray-600 mt-1">Isquiotibiales</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 12-15
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 40-45 kg
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 60 seg
+                        </div>
+                    </div>
+
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Curl de bíceps con polea</h5>
+                        <p class="text-xs text-gray-600 mt-1">Aislamiento bíceps</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 12-15
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 30-33 kg
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 60 seg
+                        </div>
+                    </div>
+
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Abducción de cadera</h5>
+                        <p class="text-xs text-gray-600 mt-1">Objetivo específico</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 15
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 45-50 kg
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 60 seg
+                        </div>
+                    </div>
+
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Russian twist con mancuerna</h5>
+                        <p class="text-xs text-gray-600 mt-1">Core rotacional</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 15/lado
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 6-8 kg
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 45 seg
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Finalización -->
+                <div class="mt-4">
+                    <h4 class="font-medium mb-2">Finalización (10 min):</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700">
+                        <li>Estiramientos estáticos para espalda, bíceps y zona posterior de piernas</li>
+                        <li>Liberación miofascial con foam roller</li>
+                    </ul>
+                </div>
+            </div>
         </div>
         
-        <!-- Día 3 -->
+        <!-- Entrenamiento 3 -->
         <div class="bg-white rounded-xl shadow-card mb-6 overflow-hidden border border-gray-100">
             <button class="w-full p-4 text-left flex justify-between items-center">
                 <div>
-                    <h3 class="font-semibold text-gray-800">Día 3: Espalda, Bíceps y Complementos</h3>
+                    <h3 class="font-semibold text-gray-800">Entrenamiento 3: Cuerpo Completo - Énfasis en Piernas y Funcional</h3>
                     <p class="text-sm text-gray-600">Recomendado: Viernes</p>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
             </button>
+
+            <div class="p-4 border-t border-gray-100">
+                <!-- Calentamiento -->
+                <div class="mb-4">
+                    <h4 class="font-medium mb-2">Calentamiento (10 min):</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700">
+                        <li>5 min bicicleta estática</li>
+                        <li>Movilidad dinámica enfocada en cadera</li>
+                    </ul>
+                </div>
+
+                <h4 class="font-medium mb-2">Bloque Principal (50-55 min):</h4>
+                
+                <div class="space-y-3">
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Sentadilla búlgara con mancuernas</h5>
+                        <p class="text-xs text-gray-600 mt-1">Principal tren inferior unilateral</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 10/pierna
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 8-10 kg/mano
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 75 seg
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Técnica:</span> Cuidado con apoyo del pie por fasciitis
+                        </div>
+                    </div>
+                    
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Press de banca con mancuernas</h5>
+                        <p class="text-xs text-gray-600 mt-1">Empuje horizontal</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 12-15
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 15-17 kg/lado
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 75 seg
+                        </div>
+                    </div>
+                    
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Remo inclinado con mancuernas</h5>
+                        <p class="text-xs text-gray-600 mt-1">Tracción horizontal</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 10-12
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 12-15 kg/lado
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 75 seg
+                        </div>
+                    </div>
+
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Aducción de cadera</h5>
+                        <p class="text-xs text-gray-600 mt-1">Objetivo específico</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 15
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 45-50 kg
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 60 seg
+                        </div>
+                    </div>
+
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Curl araña con mancuerna</h5>
+                        <p class="text-xs text-gray-600 mt-1">Bíceps con core</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 10-12
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 10-12 kg
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 60 seg
+                        </div>
+                    </div>
+
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Fondos en banco</h5>
+                        <p class="text-xs text-gray-600 mt-1">Tríceps funcional</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 12-15
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> Corporal
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 60 seg
+                        </div>
+                    </div>
+
+                    <div class="border-b pb-3">
+                        <h5 class="font-medium">Balanceo con mancuerna</h5>
+                        <p class="text-xs text-gray-600 mt-1">Funcional cadera</p>
+                        <div class="grid grid-cols-3 text-sm mt-1">
+                            <div>
+                                <span class="text-gray-600">Series:</span> 3
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Reps:</span> 15
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Peso:</span> 15-20 kg
+                            </div>
+                        </div>
+                        <div class="text-sm mt-1">
+                            <span class="text-gray-600">Descanso:</span> 60 seg
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Finalización -->
+                <div class="mt-4">
+                    <h4 class="font-medium mb-2">Finalización (10 min):</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700">
+                        <li>Estiramientos completos con énfasis en flexores de cadera</li>
+                        <li>Trabajo específico para fasciitis plantar</li>
+                    </ul>
+                </div>
+            </div>
         </div>
         
         <!-- Notas importantes -->
