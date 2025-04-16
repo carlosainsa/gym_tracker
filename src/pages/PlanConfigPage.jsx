@@ -7,7 +7,7 @@ import PeriodizationConfig from '../components/PeriodizationConfig';
 import SplitConfig from '../components/SplitConfig';
 import EquipmentConfig from '../components/EquipmentConfig';
 import GoalConfig from '../components/GoalConfig';
-import TemplateSelector from '../components/TemplateSelector';
+import PlanTemplateSelector from '../components/PlanTemplateSelector';
 
 const PlanConfigPage = () => {
   const navigate = useNavigate();
@@ -128,9 +128,9 @@ const PlanConfigPage = () => {
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
               Las plantillas te permiten crear planes de entrenamiento completos con un solo clic. Selecciona la que mejor se adapte a tus objetivos.
             </p>
-            <TemplateSelector
+            <PlanTemplateSelector
               onSelectTemplate={handleSelectTemplate}
-              onCreatePlan={handleCreatePlanFromTemplate}
+              onBack={() => setShowTemplates(false)}
             />
           </div>
         </AdvancedConfigSection>
