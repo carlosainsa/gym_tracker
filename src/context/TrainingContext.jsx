@@ -23,8 +23,20 @@ const PLAN_VERSION = '3.0';
 export const TrainingProvider = ({ children }) => {
   const { currentUser } = useAuth();
 
-  // Estado para el plan de entrenamiento (nuevo formato)
+  // Estado para el plan de entrenamiento activo (nuevo formato)
   const [trainingPlan, setTrainingPlan] = useState(primerPlan);
+
+  // Estado para todos los planes de entrenamiento
+  const [trainingPlans, setTrainingPlans] = useState(() => {
+    const savedPlans = localStorage.getItem('trainingPlans');
+    return savedPlans ? JSON.parse(savedPlans) : [primerPlan];
+  });
+
+  // Estado para el ID del plan activo
+  const [activePlanId, setActivePlanId] = useState(() => {
+    const savedActivePlanId = localStorage.getItem('activePlanId');
+    return savedActivePlanId || primerPlan.id;
+  });
 
   // Estado para el plan de entrenamiento (formato antiguo para compatibilidad)
   const [legacyPlan, setLegacyPlan] = useState(() => {
@@ -134,6 +146,26 @@ export const TrainingProvider = ({ children }) => {
       localStorage.setItem('trainingPlan', JSON.stringify(trainingPlan));
     }
   }, [trainingPlan]);
+
+  // Guardar todos los planes en localStorage
+  useEffect(() => {
+    if (trainingPlans) {
+      localStorage.setItem('trainingPlans', JSON.stringify(trainingPlans));
+    }
+  }, [trainingPlans]);
+
+  // Guardar el ID del plan activo en localStorage
+  useEffect(() => {
+    if (activePlanId) {
+      localStorage.setItem('activePlanId', activePlanId);
+
+      // Actualizar el plan activo
+      const activePlan = trainingPlans.find(plan => plan.id === activePlanId);
+      if (activePlan) {
+        setTrainingPlan(activePlan);
+      }
+    }
+  }, [activePlanId, trainingPlans]);
 
   useEffect(() => {
     if (legacyPlan) {
@@ -312,8 +344,95 @@ export const TrainingProvider = ({ children }) => {
   // Función para crear un nuevo plan
   const createNewPlan = (planPreferences) => {
     const newPlan = trainingPlanService.createNewPlan(planPreferences);
+
+    // Actualizar el plan activo
     setTrainingPlan(newPlan);
+
+    // Agregar el nuevo plan a la lista de planes
+    setTrainingPlans(prevPlans => {
+      const updatedPlans = [...prevPlans, { ...newPlan, status: 'active' }];
+      return updatedPlans;
+    });
+
+    // Establecer el nuevo plan como activo
+    setActivePlanId(newPlan.id);
+
     return newPlan;
+  };
+
+  // Función para archivar un plan
+  const archivePlan = (planId) => {
+    setTrainingPlans(prevPlans => {
+      return prevPlans.map(plan => {
+        if (plan.id === planId) {
+          return { ...plan, status: 'archived' };
+        }
+        return plan;
+      });
+    });
+
+    // Si el plan archivado era el activo, establecer otro plan como activo
+    if (planId === activePlanId) {
+      const availablePlans = trainingPlans.filter(plan =>
+        plan.id !== planId && plan.status === 'available'
+      );
+
+      if (availablePlans.length > 0) {
+        setActivePlanId(availablePlans[0].id);
+      } else {
+        // Si no hay planes disponibles, crear uno nuevo
+        const defaultPlan = primerPlan;
+        setTrainingPlan(defaultPlan);
+        setActivePlanId(defaultPlan.id);
+
+        // Agregar el plan por defecto a la lista
+        setTrainingPlans(prevPlans => [
+          ...prevPlans.filter(p => p.id !== defaultPlan.id),
+          { ...defaultPlan, status: 'active' }
+        ]);
+      }
+    }
+  };
+
+  // Función para eliminar un plan
+  const deletePlan = (planId) => {
+    // No permitir eliminar el plan activo
+    if (planId === activePlanId) {
+      return false;
+    }
+
+    setTrainingPlans(prevPlans => {
+      return prevPlans.filter(plan => plan.id !== planId);
+    });
+
+    return true;
+  };
+
+  // Función para activar un plan
+  const activatePlan = (planId) => {
+    // Buscar el plan a activar
+    const planToActivate = trainingPlans.find(plan => plan.id === planId);
+
+    if (!planToActivate) {
+      return false;
+    }
+
+    // Actualizar el estado de los planes
+    setTrainingPlans(prevPlans => {
+      return prevPlans.map(plan => {
+        if (plan.id === planId) {
+          return { ...plan, status: 'active' };
+        } else if (plan.id === activePlanId) {
+          return { ...plan, status: 'available' };
+        }
+        return plan;
+      });
+    });
+
+    // Establecer el nuevo plan activo
+    setActivePlanId(planId);
+
+    return true;
   };
 
   // Función para obtener la sesión de entrenamiento actual
@@ -406,6 +525,10 @@ export const TrainingProvider = ({ children }) => {
     // Nuevos modelos
     trainingPlan,
     setTrainingPlan,
+    trainingPlans,
+    setTrainingPlans,
+    activePlanId,
+    setActivePlanId,
     userPreferences,
     setUserPreferences,
     updateUserPreferences,
@@ -422,6 +545,9 @@ export const TrainingProvider = ({ children }) => {
     updateExerciseProgress,
     changePhase,
     createNewPlan,
+    archivePlan,
+    deletePlan,
+    activatePlan,
     getCurrentSession,
     getAvailableSessions,
     expandedDay,
