@@ -22,6 +22,7 @@ import PlanDetailsPage from './pages/PlanDetailsPage';
 import PlanEditPage from './pages/PlanEditPage';
 import PlanStatsPage from './pages/PlanStatsPage';
 import PlanComparisonPage from './pages/PlanComparisonPage';
+import PlanTransitionPage from './pages/PlanTransitionPage';
 import ProgressPage from './pages/ProgressPage';
 import AdvancedProgressPage from './pages/AdvancedProgressPage';
 import TemplatesPage from './pages/TemplatesPage';
@@ -288,6 +289,18 @@ function App() {
                       <DevModeNotice />
                       <div className="container mx-auto px-4 py-8">
                         <PlanEditPage />
+                      </div>
+                    </div>
+                  </PrivateRoute>
+                } />
+                <Route path="/plan/transition/:planId" element={
+                  <PrivateRoute>
+                    <div>
+                      <Navbar />
+                      <InstallPWA />
+                      <DevModeNotice />
+                      <div className="container mx-auto px-4 py-8">
+                        <PlanTransitionPage />
                       </div>
                     </div>
                   </PrivateRoute>

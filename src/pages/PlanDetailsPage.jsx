@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { FaArrowLeft, FaCalendarAlt, FaDumbbell, FaChevronDown, FaChevronUp, FaEdit, FaChartLine, FaClipboardList, FaPlay, FaArchive, FaTrashAlt, FaExchangeAlt, FaFileImport, FaFileExport } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendarAlt, FaDumbbell, FaChevronDown, FaChevronUp, FaEdit, FaChartLine, FaClipboardList, FaPlay, FaArchive, FaTrashAlt, FaExchangeAlt, FaFileImport, FaFileExport, FaRandom } from 'react-icons/fa';
 import { useTraining } from '../context/TrainingContext';
 import ImportExportPlans from '../components/ImportExportPlans';
 
@@ -76,6 +76,11 @@ const PlanDetailsPage = () => {
   // Ver estadísticas del plan
   const handleViewStats = () => {
     setShowProgress(!showProgress);
+  };
+
+  // Ir a la página de transición de planes
+  const handleTransitionPlan = () => {
+    navigate(`/plan/transition/${planId}`);
   };
 
   // Formatear el día de la semana
@@ -209,6 +214,14 @@ const PlanDetailsPage = () => {
               >
                 <FaEdit className="mr-1.5" />
                 Editar Plan
+              </button>
+
+              <button
+                onClick={handleTransitionPlan}
+                className="flex items-center text-xs px-3 py-1.5 rounded-lg bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-800/50 transition-colors"
+              >
+                <FaRandom className="mr-1.5" />
+                Crear Transición
               </button>
 
               {plan.id === activePlanId ? (

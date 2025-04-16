@@ -5,6 +5,7 @@ import trainingPlanService from '../services/trainingPlanService';
 import userPreferencesService from '../services/userPreferencesService';
 import dataMigrationService from '../services/dataMigrationService';
 import importExportService from '../services/importExportService';
+import planTransitionService from '../services/planTransitionService';
 import { useAuth } from './AuthContext';
 import { workoutPlan, emptyWorkoutLog } from '../data/workoutPlan';
 import { primerPlan } from '../data/primerPlan';
@@ -554,6 +555,47 @@ export const TrainingProvider = ({ children }) => {
     }
   };
 
+  // Función para crear un plan de transición
+  const createTransitionPlan = (sourcePlanId, options = {}) => {
+    try {
+      // Buscar el plan de origen
+      const sourcePlan = trainingPlans.find(p => p.id === sourcePlanId);
+      if (!sourcePlan) {
+        throw new Error('Plan de origen no encontrado');
+      }
+
+      // Crear el plan de transición
+      const transitionPlan = planTransitionService.createTransitionPlan(sourcePlan, options);
+
+      // Agregar el plan a la lista de planes
+      setTrainingPlans(prevPlans => {
+        return [...prevPlans, { ...transitionPlan, status: 'available' }];
+      });
+
+      return transitionPlan;
+    } catch (error) {
+      console.error('Error al crear el plan de transición:', error);
+      throw error;
+    }
+  };
+
+  // Función para analizar un plan para transición
+  const analyzePlanForTransition = (planId) => {
+    try {
+      // Buscar el plan
+      const plan = trainingPlans.find(p => p.id === planId);
+      if (!plan) {
+        throw new Error('Plan no encontrado');
+      }
+
+      // Analizar el plan
+      return planTransitionService.analyzePlanForTransition(plan, workoutLogs);
+    } catch (error) {
+      console.error('Error al analizar el plan para transición:', error);
+      throw error;
+    }
+  };
+
   // Valores que se proporcionarán a través del contexto
   const value = {
     // Nuevos modelos
@@ -592,7 +634,11 @@ export const TrainingProvider = ({ children }) => {
     // Funciones de importación/exportación
     exportPlanToJson,
     downloadPlanAsJson,
-    importPlanFromJson
+    importPlanFromJson,
+
+    // Funciones de transición de planes
+    createTransitionPlan,
+    analyzePlanForTransition
   };
 
   return (
