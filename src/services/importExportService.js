@@ -241,6 +241,110 @@ class ImportExportService {
   }
 
   /**
+   * Descarga un plan como archivo JSON
+   * @param {TrainingPlan} plan - Plan a descargar
+   * @returns {boolean} - true si la descarga se inició correctamente
+   */
+  downloadPlanAsJson(plan) {
+    try {
+      // Exportar el plan a JSON
+      const exportData = this.exportPlan(plan.id);
+      const jsonString = JSON.stringify(exportData, null, 2);
+
+      // Descargar el archivo
+      return this.downloadFile(
+        jsonString,
+        `${plan.name.replace(/\s+/g, '_')}.json`,
+        'application/json'
+      );
+    } catch (error) {
+      console.error('Error al descargar plan como JSON:', error);
+      throw new Error(`No se pudo descargar el plan: ${error.message}`);
+    }
+  }
+
+  /**
+   * Convierte un plan a formato CSV
+   * @param {TrainingPlan} plan - Plan a convertir
+   * @returns {string} - Contenido CSV
+   */
+  convertPlanToCsv(plan) {
+    try {
+      // Encabezados CSV
+      const headers = [
+        'Microciclo',
+        'Día',
+        'Sesión',
+        'Ejercicio',
+        'Series',
+        'Repeticiones',
+        'Peso (kg)',
+        'Descanso (seg)',
+        'Notas'
+      ];
+
+      // Filas de datos
+      const rows = [];
+
+      // Agregar encabezados
+      rows.push(headers.join(','));
+
+      // Recorrer microciclos
+      plan.microcycles.forEach(microcycle => {
+        // Recorrer sesiones
+        microcycle.trainingSessions.forEach(session => {
+          // Recorrer ejercicios
+          session.exercises.forEach(exercise => {
+            // Recorrer series
+            exercise.sets.forEach((set, setIndex) => {
+              const row = [
+                `"Semana ${microcycle.weekNumber}"`,
+                `"${session.day}"`,
+                `"${session.name || 'Sesión ' + session.day}"`,
+                `"${exercise.name}"`,
+                setIndex + 1,
+                set.repsMin && set.repsMax ? `${set.repsMin}-${set.repsMax}` : set.reps || '',
+                set.weight || '',
+                set.rest || '',
+                `"${exercise.notes || ''}"`,
+              ];
+
+              rows.push(row.join(','));
+            });
+          });
+        });
+      });
+
+      return rows.join('\n');
+    } catch (error) {
+      console.error('Error al convertir plan a CSV:', error);
+      throw new Error(`No se pudo convertir el plan a CSV: ${error.message}`);
+    }
+  }
+
+  /**
+   * Descarga un plan como archivo CSV
+   * @param {TrainingPlan} plan - Plan a descargar
+   * @returns {boolean} - true si la descarga se inició correctamente
+   */
+  downloadPlanAsCsv(plan) {
+    try {
+      // Convertir el plan a CSV
+      const csvContent = this.convertPlanToCsv(plan);
+
+      // Descargar el archivo
+      return this.downloadFile(
+        csvContent,
+        `${plan.name.replace(/\s+/g, '_')}.csv`,
+        'text/csv;charset=utf-8'
+      );
+    } catch (error) {
+      console.error('Error al descargar plan como CSV:', error);
+      throw new Error(`No se pudo descargar el plan: ${error.message}`);
+    }
+  }
+
+  /**
    * Exporta un plan de entrenamiento a formato CSV
    * @param {TrainingPlan} plan - Plan de entrenamiento a exportar
    * @returns {string} - Contenido CSV del plan
@@ -536,66 +640,106 @@ class ImportExportService {
   /**
    * Valida un archivo antes de importarlo
    * @param {File} file - Archivo a validar
-   * @returns {Promise<boolean>} - Promesa que resuelve a true si el archivo es válido
+   * @returns {Promise<Object>} - Promesa que resuelve a un objeto con información de validación
    */
   async validateImportFile(file) {
     return new Promise((resolve, reject) => {
-      // Verificar el tipo de archivo
-      if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
-        reject(new Error('El archivo debe ser de tipo JSON'));
-        return;
-      }
-
       // Verificar el tamaño del archivo (máximo 5MB)
       if (file.size > 5 * 1024 * 1024) {
         reject(new Error('El archivo es demasiado grande (máximo 5MB)'));
         return;
       }
 
-      // Leer el contenido del archivo
-      const reader = new FileReader();
+      // Verificar el tipo de archivo
+      if (file.type === 'application/json' || file.name.endsWith('.json')) {
+        // Validar JSON
+        const reader = new FileReader();
 
-      reader.onload = (e) => {
-        try {
-          // Intentar parsear el JSON
-          const data = JSON.parse(e.target.result);
+        reader.onload = (e) => {
+          try {
+            // Intentar parsear el JSON
+            const data = JSON.parse(e.target.result);
 
-          // Verificar si es una exportación de múltiples planes
-          if (data.exportMetadata && data.exportMetadata.type === 'multiple_plans' && Array.isArray(data.plans)) {
-            // Verificar que al menos un plan sea válido
-            if (data.plans.length === 0) {
-              reject(new Error('El archivo no contiene planes de entrenamiento'));
+            // Verificar si es una exportación de múltiples planes
+            if (data.exportMetadata && data.exportMetadata.type === 'multiple_plans' && Array.isArray(data.plans)) {
+              // Verificar que al menos un plan sea válido
+              if (data.plans.length === 0) {
+                reject(new Error('El archivo no contiene planes de entrenamiento'));
+                return;
+              }
+
+              // Verificar que al menos el primer plan sea válido
+              const firstPlan = data.plans[0];
+              if (!firstPlan.name || !firstPlan.id || !firstPlan.microcycles) {
+                reject(new Error('El archivo contiene planes de entrenamiento inválidos'));
+                return;
+              }
+
+              resolve({ valid: true, fileType: 'json', isMultiple: true, plansCount: data.plans.length });
               return;
             }
 
-            // Verificar que al menos el primer plan sea válido
-            const firstPlan = data.plans[0];
-            if (!firstPlan.name || !firstPlan.id || !firstPlan.microcycles) {
-              reject(new Error('El archivo contiene planes de entrenamiento inválidos'));
+            // Verificar que sea un plan individual válido
+            if (!data.name || !data.id || !data.microcycles) {
+              reject(new Error('El archivo no contiene un plan de entrenamiento válido'));
               return;
             }
 
-            resolve(true);
-            return;
+            resolve({ valid: true, fileType: 'json', isMultiple: false, planName: data.name });
+          } catch (error) {
+            reject(new Error('El archivo no contiene un JSON válido'));
           }
+        };
 
-          // Verificar que sea un plan individual válido
-          if (!data.name || !data.id || !data.microcycles) {
-            reject(new Error('El archivo no contiene un plan de entrenamiento válido'));
-            return;
+        reader.onerror = () => {
+          reject(new Error('Error al leer el archivo'));
+        };
+
+        reader.readAsText(file);
+      } else if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
+        // Validar CSV
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          try {
+            const content = e.target.result;
+            const lines = content.split('\n').filter(line => line.trim());
+
+            // Verificar que tenga al menos dos líneas (encabezados + datos)
+            if (lines.length < 2) {
+              reject(new Error('El archivo CSV no contiene suficientes datos'));
+              return;
+            }
+
+            // Verificar encabezados
+            const headers = this.parseCSVLine(lines[0]);
+            const requiredHeaders = ['Microciclo', 'Sesión', 'Ejercicio'];
+            const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
+
+            if (missingHeaders.length > 0) {
+              reject(new Error(`El archivo CSV no contiene los encabezados requeridos: ${missingHeaders.join(', ')}`));
+              return;
+            }
+
+            resolve({
+              valid: true,
+              fileType: 'csv',
+              rowsCount: lines.length - 1,
+              headers: headers
+            });
+          } catch (error) {
+            reject(new Error(`Error al validar el archivo CSV: ${error.message}`));
           }
+        };
 
-          resolve(true);
-        } catch (error) {
-          reject(new Error('El archivo no contiene un JSON válido'));
-        }
-      };
+        reader.onerror = () => {
+          reject(new Error('Error al leer el archivo'));
+        };
 
-      reader.onerror = () => {
-        reject(new Error('Error al leer el archivo'));
-      };
-
-      reader.readAsText(file);
+        reader.readAsText(file);
+      } else {
+        reject(new Error('Formato de archivo no soportado. Use JSON o CSV'));
+      }
     });
   }
 
