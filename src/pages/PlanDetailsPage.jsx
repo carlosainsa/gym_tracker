@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import ImportExportPlans from '../components/ImportExportPlans';
 import PlanDuplicateDialog from '../components/PlanDuplicateDialog';
 import PlanShareDialog from '../components/PlanShareDialog';
+import PlanTransitionDialog from '../components/PlanTransitionDialog';
 
 /**
  * Página para ver los detalles de un plan de entrenamiento
@@ -22,6 +23,7 @@ const PlanDetailsPage = () => {
   const [showProgress, setShowProgress] = useState(false);
   const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
+  const [showTransitionDialog, setShowTransitionDialog] = useState(false);
 
   // Cargar el plan
   useEffect(() => {
@@ -83,9 +85,9 @@ const PlanDetailsPage = () => {
     setShowProgress(!showProgress);
   };
 
-  // Ir a la página de transición de planes
+  // Mostrar el diálogo de transición de planes
   const handleTransitionPlan = () => {
-    navigate(`/plan/transition/${planId}`);
+    setShowTransitionDialog(true);
   };
 
   // Mostrar el diálogo de duplicación de planes
@@ -525,6 +527,22 @@ const PlanDetailsPage = () => {
         <PlanShareDialog
           plan={plan}
           onClose={() => setShowShareDialog(false)}
+        />
+      )}
+
+      {/* Diálogo de transición de plan */}
+      {showTransitionDialog && plan && (
+        <PlanTransitionDialog
+          isOpen={showTransitionDialog}
+          onClose={(transitionPlan) => {
+            setShowTransitionDialog(false);
+            if (transitionPlan) {
+              toast.success(`Plan de transición "${transitionPlan.name}" creado correctamente`);
+              // Navegar al nuevo plan
+              navigate(`/plan/${transitionPlan.id}`);
+            }
+          }}
+          sourcePlanId={planId}
         />
       )}
     </div>
