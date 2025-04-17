@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaChartLine, FaExchangeAlt, FaCheck, FaDumbbell, FaChartBar, FaChartPie } from 'react-icons/fa';
+import { FaArrowLeft, FaChartLine, FaExchangeAlt, FaCheck, FaDumbbell, FaChartBar, FaChartPie, FaInfoCircle, FaPercentage, FaBalanceScale } from 'react-icons/fa';
 import { useTraining } from '../context/TrainingContext';
 import PlanComparisonChart from '../components/PlanComparisonChart';
 import ExerciseComparisonRadar from '../components/ExerciseComparisonRadar';
+import MuscleGroupComparison from '../components/MuscleGroupComparison';
+import MuscleGroupDistribution from '../components/MuscleGroupDistribution';
+import statisticsService from '../services/statisticsService';
+import planComparisonService from '../services/planComparisonService';
 
 /**
  * Página para comparar planes de entrenamiento
@@ -18,6 +22,12 @@ const PlanComparisonPage = () => {
   const [availablePlans, setAvailablePlans] = useState([]);
   const [baseStats, setBaseStats] = useState(null);
   const [compareStats, setCompareStats] = useState(null);
+
+  // Estado para las estadísticas avanzadas
+  const [advancedComparison, setAdvancedComparison] = useState(null);
+
+  // Estado para controlar la vista
+  const [viewMode, setViewMode] = useState('basic'); // 'basic' o 'advanced'
 
   // Cargar el plan base y los planes disponibles para comparar
   useEffect(() => {
@@ -41,8 +51,48 @@ const PlanComparisonPage = () => {
   useEffect(() => {
     if (comparePlan) {
       calculatePlanStats(comparePlan, setCompareStats);
+
+      // Calcular estadísticas avanzadas de comparación
+      if (basePlan) {
+        // Filtrar logs relevantes para cada plan
+        const baseSessionIds = basePlan.microcycles.flatMap(
+          microcycle => microcycle.trainingSessions.map(session => session.id)
+        );
+        const compareSessionIds = comparePlan.microcycles.flatMap(
+          microcycle => microcycle.trainingSessions.map(session => session.id)
+        );
+
+        const baseFilteredLogs = workoutLogs.logs.filter(
+          log => baseSessionIds.includes(log.sessionId)
+        );
+        const compareFilteredLogs = workoutLogs.logs.filter(
+          log => compareSessionIds.includes(log.sessionId)
+        );
+
+        // Calcular la comparación avanzada
+        try {
+          const comparison = planComparisonService.comparePlans(
+            basePlan.id,
+            comparePlan.id,
+            {
+              includeStructure: true,
+              includeExercises: true,
+              includeVolume: true,
+              includeIntensity: true,
+              includeProgression: true
+            }
+          );
+
+          setAdvancedComparison(comparison);
+        } catch (error) {
+          console.error('Error al comparar planes:', error);
+          setAdvancedComparison(null);
+        }
+      }
+    } else {
+      setAdvancedComparison(null);
     }
-  }, [comparePlan, workoutLogs]);
+  }, [comparePlan, basePlan, workoutLogs]);
 
   // Calcular estadísticas de un plan
   const calculatePlanStats = (plan, setStats) => {
@@ -50,99 +100,12 @@ const PlanComparisonPage = () => {
       return;
     }
 
-    // Obtener todas las sesiones del plan
-    const sessionIds = plan.microcycles.flatMap(
-      microcycle => microcycle.trainingSessions.map(session => session.id)
-    );
+    // Usar el servicio de estadísticas para calcular las estadísticas del plan
+    const calculatedStats = statisticsService.calculatePlanStats(plan, workoutLogs);
 
-    // Filtrar los registros que pertenecen a este plan
-    const planLogs = workoutLogs.logs.filter(
-      log => sessionIds.includes(log.sessionId)
-    );
-
-    // Calcular estadísticas
-    const totalWorkouts = planLogs.length;
-    let totalExercises = 0;
-    let totalSets = 0;
-    let totalVolume = 0;
-    let totalDuration = 0;
-    let exerciseStats = {};
-
-    planLogs.forEach(log => {
-      // Sumar duración
-      if (log.duration) {
-        totalDuration += log.duration;
-      }
-
-      // Procesar ejercicios
-      if (log.exercises) {
-        totalExercises += log.exercises.length;
-
-        log.exercises.forEach(exercise => {
-          const exerciseName = exercise.name;
-
-          // Inicializar datos del ejercicio si no existen
-          if (!exerciseStats[exerciseName]) {
-            exerciseStats[exerciseName] = {
-              name: exerciseName,
-              sets: 0,
-              totalVolume: 0,
-              maxWeight: 0,
-              totalReps: 0,
-              sessions: 0
-            };
-          }
-
-          // Incrementar contador de sesiones
-          exerciseStats[exerciseName].sessions += 1;
-
-          // Procesar series
-          if (exercise.sets) {
-            const exerciseSets = exercise.sets.length;
-            totalSets += exerciseSets;
-            exerciseStats[exerciseName].sets += exerciseSets;
-
-            exercise.sets.forEach(set => {
-              if (set.actualReps && set.actualWeight) {
-                const reps = parseInt(set.actualReps);
-                const weight = parseFloat(set.actualWeight);
-
-                if (!isNaN(reps) && !isNaN(weight)) {
-                  // Calcular volumen (peso x repeticiones)
-                  const volume = weight * reps;
-                  totalVolume += volume;
-                  exerciseStats[exerciseName].totalVolume += volume;
-
-                  // Actualizar máximos
-                  if (weight > exerciseStats[exerciseName].maxWeight) {
-                    exerciseStats[exerciseName].maxWeight = weight;
-                  }
-
-                  // Sumar repeticiones
-                  exerciseStats[exerciseName].totalReps += reps;
-                }
-              }
-            });
-          }
-        });
-      }
-    });
-
-    // Calcular promedios
-    const avgWorkoutDuration = totalWorkouts > 0 ? totalDuration / totalWorkouts : 0;
-    const avgVolumePerWorkout = totalWorkouts > 0 ? totalVolume / totalWorkouts : 0;
-
-    // Establecer estadísticas
-    setStats({
-      totalWorkouts,
-      totalExercises,
-      totalSets,
-      totalVolume,
-      totalDuration,
-      avgWorkoutDuration,
-      avgVolumePerWorkout,
-      exerciseStats
-    });
+    if (calculatedStats) {
+      setStats(calculatedStats);
+    }
   };
 
   // Manejar la selección de un plan para comparar
@@ -389,6 +352,44 @@ const PlanComparisonPage = () => {
         </div>
       )}
 
+      {/* Comparación de grupos musculares */}
+      {baseStats && compareStats && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-6">
+          <div className="p-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+            <h2 className="font-medium text-gray-800 dark:text-white flex items-center">
+              <FaChartBar className="text-primary-500 mr-2" />
+              Comparación por Grupo Muscular
+            </h2>
+          </div>
+
+          <div className="p-4">
+            <MuscleGroupComparison
+              baseStats={baseStats}
+              compareStats={compareStats}
+              basePlanName={basePlan.name}
+              comparePlanName={comparePlan.name}
+            />
+
+            {/* Estadísticas comparativas */}
+            {baseStats.muscleGroupStats && compareStats.muscleGroupStats && (
+              <div className="mt-6">
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Distribución de Volumen</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2 text-center">{basePlan.name}</h4>
+                    <MuscleGroupDistribution stats={baseStats} title="" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2 text-center">{comparePlan.name}</h4>
+                    <MuscleGroupDistribution stats={compareStats} title="" />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Comparación de ejercicios comunes */}
       {baseStats && compareStats && (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-6">
@@ -423,6 +424,11 @@ const PlanComparisonPage = () => {
                       const baseExercise = baseStats.exerciseStats[exerciseName];
                       const compareExercise = compareStats.exerciseStats[exerciseName];
 
+                      // Calcular diferencia porcentual
+                      const maxWeightDiff = calculateDifference(baseExercise.maxWeight, compareExercise.maxWeight);
+                      const volumeDiff = calculateDifference(baseExercise.totalVolume, compareExercise.totalVolume);
+                      const repsDiff = calculateDifference(baseExercise.totalReps, compareExercise.totalReps);
+
                       return (
                         <div key={exerciseName} className="border-b border-gray-200 dark:border-gray-700 pb-6 last:border-0 last:pb-0">
                           <h3 className="font-bold text-gray-800 dark:text-white mb-3">{exerciseName}</h3>
@@ -443,7 +449,7 @@ const PlanComparisonPage = () => {
                                   <td className="py-2 px-3 text-xs text-center font-medium text-gray-800 dark:text-white">{baseExercise.maxWeight}</td>
                                   <td className="py-2 px-3 text-xs text-center font-medium text-gray-800 dark:text-white">{compareExercise.maxWeight}</td>
                                   <td className="py-2 px-3 text-xs text-center">
-                                    {renderDifference(calculateDifference(baseExercise.maxWeight, compareExercise.maxWeight))}
+                                    {renderDifference(maxWeightDiff)}
                                   </td>
                                 </tr>
                                 <tr className="border-b border-gray-200 dark:border-gray-700">
@@ -451,7 +457,7 @@ const PlanComparisonPage = () => {
                                   <td className="py-2 px-3 text-xs text-center font-medium text-gray-800 dark:text-white">{Math.round(baseExercise.totalVolume).toLocaleString()}</td>
                                   <td className="py-2 px-3 text-xs text-center font-medium text-gray-800 dark:text-white">{Math.round(compareExercise.totalVolume).toLocaleString()}</td>
                                   <td className="py-2 px-3 text-xs text-center">
-                                    {renderDifference(calculateDifference(baseExercise.totalVolume, compareExercise.totalVolume))}
+                                    {renderDifference(volumeDiff)}
                                   </td>
                                 </tr>
                                 <tr>
@@ -459,7 +465,7 @@ const PlanComparisonPage = () => {
                                   <td className="py-2 px-3 text-xs text-center font-medium text-gray-800 dark:text-white">{baseExercise.totalReps}</td>
                                   <td className="py-2 px-3 text-xs text-center font-medium text-gray-800 dark:text-white">{compareExercise.totalReps}</td>
                                   <td className="py-2 px-3 text-xs text-center">
-                                    {renderDifference(calculateDifference(baseExercise.totalReps, compareExercise.totalReps))}
+                                    {renderDifference(repsDiff)}
                                   </td>
                                 </tr>
                               </tbody>
@@ -473,6 +479,162 @@ const PlanComparisonPage = () => {
             ) : (
               <div className="text-center py-6">
                 <p className="text-gray-600 dark:text-gray-400">No hay ejercicios comunes entre los planes seleccionados.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Comparación avanzada */}
+      {advancedComparison && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-6">
+          <div className="p-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+            <h2 className="font-medium text-gray-800 dark:text-white flex items-center">
+              <FaBalanceScale className="text-primary-500 mr-2" />
+              Análisis Avanzado de Comparación
+            </h2>
+          </div>
+
+          <div className="p-4">
+            {/* Resumen de similitud */}
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mb-6">
+              <div className="flex items-start">
+                <FaInfoCircle className="text-blue-500 dark:text-blue-400 mt-1 mr-3 flex-shrink-0" />
+                <div>
+                  <h3 className="font-medium text-blue-800 dark:text-blue-300 mb-1">Puntuación de Similitud</h3>
+                  <div className="flex items-center mb-2">
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mr-3">
+                      <div
+                        className="bg-primary-500 h-4 rounded-full flex items-center justify-center text-xs text-white font-medium"
+                        style={{ width: `${advancedComparison.summary.similarityScore}%` }}
+                      >
+                        {advancedComparison.summary.similarityScore}%
+                      </div>
+                    </div>
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300 w-12">
+                      {advancedComparison.summary.similarityScore}%
+                    </span>
+                  </div>
+                  <p className="text-sm text-blue-700 dark:text-blue-300">
+                    {advancedComparison.summary.similarityScore >= 80 ?
+                      'Los planes son muy similares en estructura y enfoque.' :
+                      advancedComparison.summary.similarityScore >= 60 ?
+                      'Los planes tienen bastantes similitudes pero con diferencias notables.' :
+                      advancedComparison.summary.similarityScore >= 40 ?
+                      'Los planes tienen algunas similitudes pero son mayormente diferentes.' :
+                      'Los planes son fundamentalmente diferentes en estructura y enfoque.'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Resumen de comparación */}
+            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+              <FaPercentage className="text-primary-500 mr-2" />
+              Diferencias Principales
+            </h3>
+
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                <h4 className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Duración</h4>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <span className="text-sm font-medium text-gray-800 dark:text-white">
+                      {advancedComparison.summary.durationComparison.planA} vs {advancedComparison.summary.durationComparison.planB} semanas
+                    </span>
+                  </div>
+                  <span className={`text-sm font-medium ${advancedComparison.summary.durationComparison.percentDifference > 0 ? 'text-green-600 dark:text-green-400' : advancedComparison.summary.durationComparison.percentDifference < 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400'}`}>
+                    {advancedComparison.summary.durationComparison.percentDifference > 0 ? '+' : ''}
+                    {advancedComparison.summary.durationComparison.percentDifference.toFixed(1)}%
+                  </span>
+                </div>
+              </div>
+
+              <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                <h4 className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Volumen Total</h4>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <span className="text-sm font-medium text-gray-800 dark:text-white">
+                      {Math.round(advancedComparison.summary.volumeComparison.planA).toLocaleString()} vs {Math.round(advancedComparison.summary.volumeComparison.planB).toLocaleString()} kg
+                    </span>
+                  </div>
+                  <span className={`text-sm font-medium ${advancedComparison.summary.volumeComparison.percentDifference > 0 ? 'text-green-600 dark:text-green-400' : advancedComparison.summary.volumeComparison.percentDifference < 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400'}`}>
+                    {advancedComparison.summary.volumeComparison.percentDifference > 0 ? '+' : ''}
+                    {advancedComparison.summary.volumeComparison.percentDifference.toFixed(1)}%
+                  </span>
+                </div>
+              </div>
+
+              <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                <h4 className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Intensidad Promedio</h4>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <span className="text-sm font-medium text-gray-800 dark:text-white">
+                      {advancedComparison.summary.intensityComparison.planA.toFixed(1)} vs {advancedComparison.summary.intensityComparison.planB.toFixed(1)}
+                    </span>
+                  </div>
+                  <span className={`text-sm font-medium ${advancedComparison.summary.intensityComparison.percentDifference > 0 ? 'text-green-600 dark:text-green-400' : advancedComparison.summary.intensityComparison.percentDifference < 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400'}`}>
+                    {advancedComparison.summary.intensityComparison.percentDifference > 0 ? '+' : ''}
+                    {advancedComparison.summary.intensityComparison.percentDifference.toFixed(1)}%
+                  </span>
+                </div>
+              </div>
+
+              <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                <h4 className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Frecuencia Semanal</h4>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <span className="text-sm font-medium text-gray-800 dark:text-white">
+                      {advancedComparison.summary.frequencyComparison.planA.toFixed(1)} vs {advancedComparison.summary.frequencyComparison.planB.toFixed(1)} sesiones/semana
+                    </span>
+                  </div>
+                  <span className={`text-sm font-medium ${advancedComparison.summary.frequencyComparison.percentDifference > 0 ? 'text-green-600 dark:text-green-400' : advancedComparison.summary.frequencyComparison.percentDifference < 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400'}`}>
+                    {advancedComparison.summary.frequencyComparison.percentDifference > 0 ? '+' : ''}
+                    {advancedComparison.summary.frequencyComparison.percentDifference.toFixed(1)}%
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Comparación de ejercicios */}
+            {advancedComparison.exercises && (
+              <div className="mt-6">
+                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                  <FaDumbbell className="text-primary-500 mr-2" />
+                  Comparación de Ejercicios
+                </h3>
+
+                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                  <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-1">
+                        {advancedComparison.exercises.common.count}
+                      </div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400">Ejercicios comunes</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-amber-600 dark:text-amber-400 mb-1">
+                        {advancedComparison.exercises.uniqueToA.count}
+                      </div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400">Solo en {basePlan.name}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+                        {advancedComparison.exercises.uniqueToB.count}
+                      </div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400">Solo en {comparePlan.name}</div>
+                    </div>
+                  </div>
+
+                  <div className="text-center">
+                    <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2.5 mb-2">
+                      <div className="bg-primary-500 h-2.5 rounded-full" style={{ width: `${advancedComparison.exercises.common.percentage}%` }}></div>
+                    </div>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                      {advancedComparison.exercises.common.percentage.toFixed(1)}% de similitud en ejercicios
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
           </div>

@@ -8,6 +8,8 @@ import PlanDuplicateDialog from '../components/PlanDuplicateDialog';
 import PlanShareDialog from '../components/PlanShareDialog';
 import PlanTransitionDialog from '../components/PlanTransitionDialog';
 import PlanArchiveDialog from '../components/PlanArchiveDialog';
+import RecommendedPlanComparisons from '../components/RecommendedPlanComparisons';
+import planComparisonService from '../services/planComparisonService';
 
 /**
  * Página para ver los detalles de un plan de entrenamiento
@@ -26,6 +28,7 @@ const PlanDetailsPage = () => {
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [showTransitionDialog, setShowTransitionDialog] = useState(false);
   const [showArchiveDialog, setShowArchiveDialog] = useState(false);
+  const [recommendedPlans, setRecommendedPlans] = useState([]);
 
   // Cargar el plan
   useEffect(() => {
@@ -37,6 +40,15 @@ const PlanDetailsPage = () => {
         // Expandir el primer microciclo por defecto
         if (foundPlan.microcycles && foundPlan.microcycles.length > 0) {
           setExpandedMicrocycleId(foundPlan.microcycles[0].id);
+        }
+
+        // Cargar planes recomendados para comparar
+        try {
+          const recommendations = planComparisonService.getRecommendedComparisons(planId, 3);
+          setRecommendedPlans(recommendations);
+        } catch (error) {
+          console.error('Error al cargar planes recomendados:', error);
+          setRecommendedPlans([]);
         }
       }
     }
@@ -560,6 +572,25 @@ const PlanDetailsPage = () => {
           }}
           plan={plan}
         />
+      )}
+
+      {/* Planes recomendados para comparar */}
+      {recommendedPlans.length > 0 && (
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-6">
+          <div className="p-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+            <h2 className="font-medium text-gray-800 dark:text-white flex items-center">
+              <FaExchangeAlt className="text-primary-500 mr-2" />
+              Planes Recomendados para Comparar
+            </h2>
+          </div>
+
+          <div className="p-4">
+            <RecommendedPlanComparisons
+              recommendations={recommendedPlans}
+              basePlanName={plan.name}
+            />
+          </div>
+        </div>
       )}
     </div>
   );
