@@ -27,6 +27,8 @@ import PlanImportExportPage from './pages/PlanImportExportPage';
 import SharedPlanPage from './pages/SharedPlanPage';
 import PlanSearchPage from './pages/PlanSearchPage';
 import SharedPlansSearchPage from './pages/SharedPlansSearchPage';
+import HistoricalPlansPage from './pages/HistoricalPlansPage';
+import HistoricalPlanDetailsPage from './pages/HistoricalPlanDetailsPage';
 import ProgressPage from './pages/ProgressPage';
 import AdvancedProgressPage from './pages/AdvancedProgressPage';
 import TemplatesPage from './pages/TemplatesPage';
@@ -389,6 +391,32 @@ function App() {
                       <DevModeNotice />
                       <div className="container mx-auto px-4 py-8">
                         <TemplatesPage />
+                      </div>
+                    </div>
+                  </PrivateRoute>
+                } />
+
+                <Route path="/plans/history" element={
+                  <PrivateRoute>
+                    <div>
+                      <Navbar />
+                      <InstallPWA />
+                      <DevModeNotice />
+                      <div className="container mx-auto px-4 py-8">
+                        <HistoricalPlansPage />
+                      </div>
+                    </div>
+                  </PrivateRoute>
+                } />
+
+                <Route path="/plan/history/:planId" element={
+                  <PrivateRoute>
+                    <div>
+                      <Navbar />
+                      <InstallPWA />
+                      <DevModeNotice />
+                      <div className="container mx-auto px-4 py-8">
+                        <HistoricalPlanDetailsPage />
                       </div>
                     </div>
                   </PrivateRoute>

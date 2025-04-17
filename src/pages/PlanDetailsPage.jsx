@@ -7,6 +7,7 @@ import ImportExportPlans from '../components/ImportExportPlans';
 import PlanDuplicateDialog from '../components/PlanDuplicateDialog';
 import PlanShareDialog from '../components/PlanShareDialog';
 import PlanTransitionDialog from '../components/PlanTransitionDialog';
+import PlanArchiveDialog from '../components/PlanArchiveDialog';
 
 /**
  * Página para ver los detalles de un plan de entrenamiento
@@ -24,6 +25,7 @@ const PlanDetailsPage = () => {
   const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [showTransitionDialog, setShowTransitionDialog] = useState(false);
+  const [showArchiveDialog, setShowArchiveDialog] = useState(false);
 
   // Cargar el plan
   useEffect(() => {
@@ -63,10 +65,9 @@ const PlanDetailsPage = () => {
     navigate('/plans');
   };
 
-  // Archivar el plan
+  // Mostrar el diálogo de archivado de plan
   const handleArchivePlan = () => {
-    archivePlan(planId);
-    navigate('/plans');
+    setShowArchiveDialog(true);
   };
 
   // Eliminar el plan
@@ -543,6 +544,21 @@ const PlanDetailsPage = () => {
             }
           }}
           sourcePlanId={planId}
+        />
+      )}
+
+      {/* Diálogo de archivado de plan */}
+      {showArchiveDialog && plan && (
+        <PlanArchiveDialog
+          isOpen={showArchiveDialog}
+          onClose={(archivedPlan) => {
+            setShowArchiveDialog(false);
+            if (archivedPlan) {
+              toast.success(`Plan "${archivedPlan.name}" archivado correctamente`);
+              navigate('/plans');
+            }
+          }}
+          plan={plan}
         />
       )}
     </div>

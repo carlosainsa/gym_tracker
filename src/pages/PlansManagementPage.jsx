@@ -310,13 +310,39 @@ const PlansManagementPage = () => {
       </div>
 
       {/* Planes históricos */}
-      {historicalPlans.length > 0 && (
-        <div>
-          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Planes de Entrenamiento Históricos</h2>
-
-          {historicalPlans.map(plan => renderPlan(plan))}
+      <div className="mb-8">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">Planes de Entrenamiento Históricos</h2>
+          <button
+            onClick={() => navigate('/plans/history')}
+            className="py-1.5 px-3 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 transition-colors flex items-center"
+          >
+            <FaExternalLinkAlt className="mr-1.5" />
+            Ver todos
+          </button>
         </div>
-      )}
+
+        {historicalPlans.length > 0 ? (
+          <div>
+            {historicalPlans.slice(0, 3).map(plan => renderPlan(plan))}
+
+            {historicalPlans.length > 3 && (
+              <div className="text-center mt-4">
+                <button
+                  onClick={() => navigate('/plans/history')}
+                  className="text-primary-600 hover:text-primary-700 dark:text-primary-500 dark:hover:text-primary-400 font-medium"
+                >
+                  Ver {historicalPlans.length - 3} planes históricos más
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 text-center">
+            <p className="text-gray-600 dark:text-gray-400">No hay planes históricos. Los planes archivados aparecerán aquí.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
