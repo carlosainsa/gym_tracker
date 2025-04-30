@@ -1,22 +1,31 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import App from './App'
 import './index.css'
-import './styles/animations.css'
-import App from './App.jsx'
 import { registerSW } from 'virtual:pwa-register'
-import './i18n/i18n' // Importar configuración de i18n
 
-// Registrar el Service Worker para PWA
 const updateSW = registerSW({
   onNeedRefresh() {
-    if (confirm('Hay una nueva versión disponible. ¿Quieres actualizar?')) {
-      updateSW(true)
-    }
+    // No mostrar el diálogo de actualización automáticamente
+    console.log('Nueva versión disponible')
   },
   onOfflineReady() {
-    console.log('La aplicación está lista para uso offline')
+    console.log('Aplicación lista para uso offline')
   },
+  onRegistered(swRegistration) {
+    if (swRegistration) {
+      setInterval(() => {
+        swRegistration.update().catch(console.error)
+      }, 60 * 60 * 1000) // Actualizar cada hora
+    }
+  },
+  onRegisterError(error) {
+    console.error('Error durante el registro del SW:', error)
+  }
 })
+
+// Función para manejar actualizaciones manualmente
+window.updateSW = () => updateSW(true)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

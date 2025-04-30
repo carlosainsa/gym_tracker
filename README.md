@@ -10,6 +10,7 @@ Una aplicación web para seguimiento de entrenamiento en gimnasio, desarrollada 
 - **Creación de Rutinas**: Crea tus propias rutinas personalizadas
 - **Interfaz Móvil**: Diseñada para ser usada desde tu celular en el gimnasio
 - **Almacenamiento Local**: Guarda tus datos localmente en tu dispositivo
+- **PWA (Progressive Web App)**: Instalable en dispositivos móviles y funciona offline
 
 ## Tecnologías Utilizadas
 
@@ -19,6 +20,7 @@ Una aplicación web para seguimiento de entrenamiento en gimnasio, desarrollada 
 - **Chart.js**: Biblioteca para crear gráficos interactivos
 - **React Router**: Enrutamiento para aplicaciones React
 - **LocalStorage**: API para almacenamiento local en el navegador
+- **Vite PWA**: Plugin para crear Progressive Web Apps con Vite
 
 ## Cómo Usar
 
@@ -45,6 +47,24 @@ npm install
 # Iniciar servidor de desarrollo
 npm run dev
 ```
+
+### Solución a problemas comunes
+
+#### Error de Tailwind CSS y PostCSS
+
+Si encuentras el siguiente error durante la compilación:
+
+```bash
+[postcss] It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install `@tailwindcss/postcss` and update your PostCSS configuration.
+```
+
+Puedes solucionarlo de dos maneras:
+
+1. **Ejecutar el script de instalación automática**:
+   - En Windows: `install-tailwind-postcss.bat`
+   - En Linux/Mac: `bash install-tailwind-postcss.sh`
+
+2. **Seguir las instrucciones manuales** en el archivo `TAILWIND_POSTCSS_FIX.md`
 
 ## Contribuciones
 

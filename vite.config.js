@@ -1,14 +1,16 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { VitePWA } from 'vite-plugin-pwa'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { VitePWA } from 'vite-plugin-pwa';
 
-// https://vite.dev/config/
 export default defineConfig({
+  base: '/gym_tracker/',
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      registerType: 'prompt',
+      devOptions: {
+        enabled: true
+      },
       manifest: {
         name: 'Gym Tracker',
         short_name: 'GymTracker',
@@ -16,6 +18,8 @@ export default defineConfig({
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
+        scope: '/gym_tracker/',
+        start_url: '/gym_tracker/',
         icons: [
           {
             src: '/vite.svg',
@@ -26,27 +30,31 @@ export default defineConfig({
             src: '/vite.svg',
             sizes: '512x512',
             type: 'image/svg+xml'
-          },
-          {
-            src: '/vite.svg',
-            sizes: '512x512',
-            type: 'image/svg+xml',
-            purpose: 'any maskable'
           }
         ]
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/api\.*/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache',
+              networkTimeoutSeconds: 10,
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 // 24 horas
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          }
+        ],
         cleanupOutdatedCaches: true,
-        navigateFallback: 'index.html'
+        sourcemap: true
       }
     })
-  ],
-  // Configuramos la base para que la aplicación se sirva desde la raíz en Firebase Hosting
-  base: '',
-  server: {
-    hmr: {
-      overlay: false
-    }
-  }
+  ]
 })
